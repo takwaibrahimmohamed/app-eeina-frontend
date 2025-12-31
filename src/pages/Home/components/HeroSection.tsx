@@ -4,12 +4,12 @@
  * Hero banner displayed for logged-out users
  * Contains call-to-action buttons for signup and exploration
  */
-import { useLanguage } from '@/contexts/LanguageContext';
-import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 export const HeroSection = () => {
-  const { t,isRTL } = useLanguage();
+  const { t, isRTL } = useLanguage();
   const navigate = useNavigate();
   return (
     <div className="flex flex-col items-center lg:items-end  lg:px-0 my-8">
@@ -18,7 +18,9 @@ export const HeroSection = () => {
         <img
           src="/assets/home/line.svg"
           alt="line"
-          className={`absolute z-5 bottom-0 ${isRTL&&"scale-x-[-1] translate-x-[20px]"} left-0 hidden lg:block`}
+          className={`absolute z-5 bottom-0 ${
+            isRTL && "scale-x-[-1] translate-x-[20px]"
+          } left-0 hidden lg:block`}
         />
 
         {/* Left Side: Text Content and CTA */}
@@ -31,22 +33,34 @@ export const HeroSection = () => {
           <h2 className="text-3xl lg:text-[36px] font-bold text-primaryColor">
             {t.home.heroHeader}
           </h2>
-          <p className="text-start text-xl lg:text-[24px] font-normal text-[#2A2C32]">{t.home.heroText}</p>
-          <button
-            type="button"
-            className="bg-primaryColor hover:bg-primaryColor/90 text-white text-[16px] font-medium rounded-[10px] w-full sm:w-[226px] h-[58px] transition-colors duration-300"
-            onClick={() => navigate('/signup')}
-          >
-            {t.home.joinNow}
-          </button>
+          <p className="text-start text-xl lg:text-[24px] font-normal text-[#2A2C32]">
+            {t.home.heroText}
+          </p>
+          <div className="flex flex-col items-center lg:items-start gap-3 w-full sm:w-auto">
+            <button
+              type="button"
+              className="bg-primaryColor hover:bg-primaryColor/90 text-white text-[16px] font-medium rounded-[10px] w-full sm:w-[226px] h-[58px] transition-all duration-300 shadow-lg shadow-primaryColor/25 hover:shadow-primaryColor/40 transform hover:-translate-y-1"
+              onClick={() => navigate("/signup")}
+            >
+              {t.home.startFreeTrial}
+            </button>
+          </div>
         </motion.div>
 
         {/* Right Side: Hero Image and Stats Cards */}
         <div className="flex-1 flex flex-col justify-end items-center lg:items-end space-y-4 w-full mb-10 lg:mb-0">
           {/* Hero Image with Circle Background */}
           <div className="relative flex justify-center lg:justify-end w-full">
-            <div className={`z-40 absolute ${isRTL?"-left-3":"-right-3"} top-1/2 -translate-y-1/2 z-10 hidden lg:block`}>
-              <img src="/assets/home/circlimg.svg" alt="" className="w-full h-full" />
+            <div
+              className={`z-40 absolute ${
+                isRTL ? "-left-3" : "-right-3"
+              } top-1/2 -translate-y-1/2 z-10 hidden lg:block`}
+            >
+              <img
+                src="/assets/home/circlimg.svg"
+                alt=""
+                className="w-full h-full"
+              />
             </div>
 
             <img
@@ -126,7 +140,12 @@ export const HeroSection = () => {
             <div className="w-32 h-20 relative hidden lg:block">
               <div className="w-32 h-20 left-0 top-0 absolute bg-white shadow-[-5px_5px_60px_0px_rgba(0,0,0,0.06)]" />
               <div className="left-[35px] top-[17px] absolute justify-start text-slate-900 text-lg font-semibold font-['Poppins'] capitalize flex items-center gap-1">
-                4.5 <img src="/assets/home/yellowStar.svg" alt="star" className="w-4 h-4" />
+                4.5{" "}
+                <img
+                  src="/assets/home/yellowStar.svg"
+                  alt="star"
+                  className="w-4 h-4"
+                />
               </div>
               <div className="left-[12px] top-[46px] absolute justify-start text-slate-900 text-xs font-normal font-['Poppins'] capitalize">
                 {t.home.GooglePlayStore}

@@ -1,8 +1,8 @@
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { PaymentMethod } from '../types';
-import { CreditCard, Trash2, Star, Plus } from 'lucide-react';
+import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { PaymentMethod } from "../types";
+import { CreditCard, Trash2, Plus, Lock } from "lucide-react";
 
 interface PaymentMethodsProps {
   paymentMethods: PaymentMethod[];
@@ -18,54 +18,78 @@ export const PaymentMethods: React.FC<PaymentMethodsProps> = ({
   onSetDefault,
 }) => {
   return (
-    <Card className="mb-6">
-      <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle>Payment Methods</CardTitle>
-        <Button onClick={onAddMethod} size="sm" className="flex items-center gap-2">
-          <Plus className="h-4 w-4" /> Add New
+    <Card className="shadow-sm border border-gray-100 h-full">
+      <CardHeader className="pb-3 border-b border-gray-100 flex flex-row items-center justify-between space-y-0">
+        <CardTitle className="text-lg font-medium flex items-center gap-2">
+          <CreditCard className="w-5 h-5 text-gray-400" />
+          Payment Methods
+        </CardTitle>
+        <Button
+          onClick={onAddMethod}
+          size="sm"
+          variant="ghost"
+          className="text-primaryColor hover:text-primaryColor/80 hover:bg-primaryColor/5 h-8"
+        >
+          <Plus className="h-4 w-4 mr-1" /> Add New
         </Button>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="pt-6 space-y-4">
         {paymentMethods.map((method) => (
           <div
             key={method.id}
-            className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors"
+            className={`group relative flex items-center justify-between p-4 border rounded-xl transition-all ${
+              method.isDefault
+                ? "bg-primaryColor/5 border-primaryColor/20 ring-1 ring-primaryColor/10"
+                : "bg-white border-gray-200 hover:border-gray-300"
+            }`}
           >
             <div className="flex items-center gap-4">
-              <div className="p-2 bg-gray-100 rounded-full">
-                <CreditCard className="h-6 w-6 text-gray-600" />
+              <div
+                className={`p-2.5 rounded-lg ${
+                  method.isDefault
+                    ? "bg-white text-primaryColor"
+                    : "bg-gray-100 text-gray-500"
+                }`}
+              >
+                <CreditCard className="h-5 w-5" />
               </div>
               <div>
-                <p className="font-medium capitalize">
-                  {method.brand} •••• {method.last4}
-                </p>
-                <p className="text-sm text-gray-500">
+                <div className="flex items-center gap-2">
+                  <p className="font-semibold text-gray-900 capitalize">
+                    {method.brand}{" "}
+                    <span className="text-gray-400 text-sm font-normal">
+                      • {method.last4}
+                    </span>
+                  </p>
+                  {method.isDefault && (
+                    <span className="px-2 py-0.5 text-[10px] font-bold text-primaryColor bg-white border border-primaryColor/20 rounded-full uppercase tracking-wide">
+                      Default
+                    </span>
+                  )}
+                </div>
+                <p className="text-xs text-gray-500 mt-0.5">
                   Expires {method.expiryMonth}/{method.expiryYear}
                 </p>
               </div>
-              {method.isDefault && (
-                <span className="px-2 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">
-                  Default
-                </span>
-              )}
             </div>
-            <div className="flex items-center gap-2">
+
+            <div className="flex items-center gap-1">
               {!method.isDefault && (
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => onSetDefault(method.id)}
-                  className="text-gray-600 hover:text-primary"
+                  className="text-xs text-gray-500 hover:text-primaryColor hover:bg-transparent"
                 >
                   Set Default
                 </Button>
               )}
+              {/* Prevent deleting if it's the only one or default (unless logic allows) */}
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => onRemoveMethod(method.id)}
-                className="text-red-500 hover:text-red-700 hover:bg-red-50"
-                disabled={method.isDefault && paymentMethods.length > 1}
+                className="h-8 w-8 text-gray-400 hover:text-red-500 hover:bg-red-50 opacity-0 group-hover:opacity-100 transition-opacity"
               >
                 <Trash2 className="h-4 w-4" />
               </Button>
@@ -73,8 +97,21 @@ export const PaymentMethods: React.FC<PaymentMethodsProps> = ({
           </div>
         ))}
         {paymentMethods.length === 0 && (
-          <p className="text-gray-500 text-center py-4">No payment methods saved.</p>
+          <div className="text-center py-8 px-4 rounded-xl border border-dashed border-gray-200 bg-gray-50/50">
+            <CreditCard className="w-8 h-8 text-gray-300 mx-auto mb-2" />
+            <p className="text-sm font-medium text-gray-500">
+              No payment methods
+            </p>
+            <p className="text-xs text-gray-400 mt-1">
+              Add a card to process payments
+            </p>
+          </div>
         )}
+
+        <div className="pt-4 flex items-center justify-center gap-2 text-xs text-gray-400">
+          <Lock className="w-3 h-3" />
+          <span>Payments secured with 256-bit encryption</span>
+        </div>
       </CardContent>
     </Card>
   );

@@ -7,6 +7,8 @@ export interface PackageTranslations {
   annual: string;
   CurrentPlan: string;
   UpgradePlan: string;
+  startFreeTrial: string;
+  freeTrialBadge: string;
 
   // SecurePayments
   EncryptedTransactions: string;

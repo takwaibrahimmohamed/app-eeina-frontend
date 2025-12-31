@@ -21,4 +21,6 @@ export interface HomeTranslations {
   Trustedclients: string;
   GooglePlayStore: string;
   joinNow: string;
+  startFreeTrial: string;
+  noCommitment: string;
 }

@@ -88,3 +88,5 @@ export { default as File} from './Icons/File.svg?react';
 export { default as Contact} from './Icons/contact.svg?react';
 export { default as Location} from './Icons/location.svg?react';
 export { default as Call} from './Icons/call.svg?react';
+export { default as FacebookIcon} from './Icons/facebookIcon.svg?react';
+export { default as Google} from './Icons/google.svg?react';

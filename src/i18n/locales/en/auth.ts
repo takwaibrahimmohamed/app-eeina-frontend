@@ -17,8 +17,8 @@ export const auth: AuthTranslations = {
   agree_to_terms: 'I agree to the Terms of Service and Privacy Policy',
   terms_of_service: 'Terms of Service',
   privacy_policy: 'Privacy Policy',
-  continue_with_google: 'Continue with Google',
-  continue_with_facebook: 'Continue with Facebook',
+  continue_with_google: 'Google',
+  continue_with_facebook: 'Facebook',
   welcome_back: 'Welcome Back',
   sign_in_to_continue: 'Sign in to continue',
   join_community: 'Join our food community',
@@ -54,7 +54,7 @@ export const auth: AuthTranslations = {
   password_weak: 'Weak',
   password_medium: 'Medium',
   password_strong: 'Strong',
-  i_agree_to: 'I agree to the',
+  i_agree_to: 'By clicking Create account, I agree that I have read and accepted the ',
   sign_up_google: 'Sign up with Google',
   sign_up_facebook: 'Sign up with Facebook',
   verify_account: 'Verify Your Account',
@@ -86,5 +86,8 @@ export const auth: AuthTranslations = {
   account_inactive: 'Your account is inactive. Please contact support.',
   invalid_token: 'Invalid authentication token. Please try again.',
   unexpected_error: 'An unexpected error occurred',
-  loginTitle:"Log in and discover your ideal weight loss"
+  loginTitle:"Log in and discover your ideal weight loss",
+  Newuser:"New user?",
+  registerTitle:"Register now and discover the best delicious recipes"
+
 };

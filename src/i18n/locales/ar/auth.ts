@@ -86,5 +86,7 @@ export const auth: AuthTranslations = {
   account_inactive: 'حسابك غير نشط. يرجى الاتصال بالدعم.',
   invalid_token: 'رمز المصادقة غير صالح. يرجى المحاولة مرة أخرى.',
   unexpected_error: 'حدث خطأ غير متوقع',
-  loginTitle:"سجّل الدخول واكتشف وزنك المثالي لإنقاصه"
+  loginTitle:"سجّل الدخول واكتشف وزنك المثالي لإنقاصه",
+  Newuser:"مستخدم جديد؟",
+  registerTitle:"سجل الآن واكتشف أفضل الوصفات اللذيذة"
 };

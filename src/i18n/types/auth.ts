@@ -85,4 +85,6 @@ export interface AuthTranslations {
   invalid_token: string;
   unexpected_error: string;
   loginTitle: string;
+  Newuser: string;
+  registerTitle: string;
 }

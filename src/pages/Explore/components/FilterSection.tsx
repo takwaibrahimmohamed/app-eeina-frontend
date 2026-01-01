@@ -26,7 +26,7 @@ export const FilterSection = ({
 
       <div className="flex items-center gap-2 flex-wrap">
         {visibleItems.map((item) => {
-          const slug = item.slug[language];
+          const slug = item.slug.en;
           const active = selected.includes(slug);
 
           return (

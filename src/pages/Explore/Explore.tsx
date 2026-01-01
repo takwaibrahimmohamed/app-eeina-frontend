@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { useState } from 'react';
+import { JSX, useState } from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { Button } from '../../components/ui/button';
 import { Search, Grid3X3, List, BookOpen, Filter, X } from 'lucide-react';
@@ -92,7 +92,7 @@ export const Explore = (): JSX.Element => {
     setter(value);
     setPage(1);
   };
-
+console.log("selectedCategory",selectedCategory)
   const clearFilters = () => {
     setSelectedCategory([]);
     setSelectedCuisine([]);

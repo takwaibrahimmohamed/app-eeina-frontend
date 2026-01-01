@@ -39,7 +39,7 @@ export const getProfileSections = (language: 'ar' | 'en', t: any): SectionProps[
     id: 'goals',
     title: language === 'ar' ? 'أهدافي' : 'My Goals',
     icon: <Goals />,
-    links: [{ label: 'View Goals', to: '/goals' }],
+    links: [{ label: 'View Goals', to: '/goals-dashboard' }],
   },
   {
     id: 'profile',

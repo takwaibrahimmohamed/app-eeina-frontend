@@ -49,10 +49,10 @@ export const MobileTopBar: React.FC<{
     const moreNavItems: NavItem[] = [ // Planner and other items go to More menu
       { name: t.nav.planner, path: '/planner' },
       { name: t.nav.lists, path: '/lists' },
-      { name: t.nav.goals, path: '/goals' },
+      { name: t.nav.goals, path: '/goals-dashboard' },
     ];
-    
-  const isWeb = Capacitor.getPlatform() === 'web';
+
+    const isWeb = Capacitor.getPlatform() === 'web';
     return (
       <div className="lg:hidden fixed top-0 left-0 right-0 z-50 safe-area-inset-top bg-white shadow-sm">
         <div className={`flex items-center justify-center px-4 py-3 pt-0 flex-row-reverse`}>

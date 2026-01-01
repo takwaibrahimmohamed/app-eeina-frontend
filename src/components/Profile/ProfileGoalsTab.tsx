@@ -40,7 +40,7 @@ export const ProfileGoalsTab = () => {
                             </div>
                             {language === 'ar' ? 'أهدافي النشطة' : 'My Active Goals'}
                         </h3>
-                        <Link to={getLocalizedPath('/goals', language)}>
+                        <Link to={getLocalizedPath('/goals-dashboard', language)}>
                             <Button size="sm" variant="ghost" className="text-primaryColor hover:text-green-700">
                                 {t.common.view_all}
                             </Button>

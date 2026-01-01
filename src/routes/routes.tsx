@@ -42,6 +42,10 @@ import BasicInformation from '@/pages/Profilev2/component/editprofile/BasicInfor
 import SocialMediaLinks from '@/pages/Profilev2/component/editprofile/SocialMediaLinks';
 import HealthProfile from '@/pages/Profilev2/component/editprofile/HealthProfile';
 import Preferences from '@/pages/Profilev2/component/editprofile/Preferencers';
+import ProfileGoalsLayout from '@/pages/Profilev2/component/goals/ProfileGoalsLayout';
+import ProfileViewGoals from '@/pages/Profilev2/component/goals/ProfileViewGoals';
+import ProfileMealHistory from '@/pages/Profilev2/component/goals/ProfileMealHistory';
+import ProfileHealthSettings from '@/pages/Profilev2/component/goals/ProfileHealthSettings';
 import Packages from '@/pages/Packages/Packages';
 import OrderSummary from '@/pages/OrderSummary/OrderSummary';
 import PaymentPage from '@/pages/Payment/PaymentPage';
@@ -165,6 +169,28 @@ const englishRoutes = [
             <Profile />
           </ProtectedRoute>
         ),
+      },
+      {
+        path: '/Profile/goals',
+        element: (
+          <ProtectedRoute>
+            <ProfileGoalsLayout />
+          </ProtectedRoute>
+        ),
+        children: [
+          {
+            index: true,
+            element: <ProfileViewGoals />
+          },
+          {
+            path: 'meal-history',
+            element: <ProfileMealHistory />
+          },
+          {
+            path: 'health-settings',
+            element: <ProfileHealthSettings />
+          }
+        ]
       },
       {
         path: '/edit',

@@ -1,6 +1,6 @@
 /**
  * StartTrialPage - Free Trial Signup Page
- * 
+ *
  * This page displays the trial signup form with package selection
  * and the Tap card form for collecting payment method.
  */
@@ -9,8 +9,9 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { StartTrialCardForm } from '@/components/Payment/StartTrialCardForm';
 import { useGetActivePackagesQuery } from '@/redux/Features/Package/PackageApi';
+import { useGetSubscriptionsQuery } from '@/redux/Features/Subscriptions/subscriptionApi';
 import { useAppSelector } from '@/hooks/hook';
-import { Loader2, ArrowLeft, Check } from 'lucide-react';
+import { Loader2, ArrowLeft, Check, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -23,14 +24,27 @@ const StartTrialPage = () => {
 
   // Get package from URL or default
   const initialPackageId = searchParams.get('package');
-  const initialInterval = (searchParams.get('interval') as 'monthly' | 'yearly') || 'monthly';
+  const initialbillingPeriod =
+    (searchParams.get('billingPeriod') as 'monthly' | 'yearly') || 'monthly';
 
   const [selectedPackageId, setSelectedPackageId] = useState<string | null>(initialPackageId);
-  const [selectedInterval, setSelectedInterval] = useState<'monthly' | 'yearly'>(initialInterval);
+  const [selectedbillingPeriod, setSelectedbillingPeriod] = useState<'monthly' | 'yearly'>(
+    initialbillingPeriod,
+  );
 
   // Fetch available packages
-  const { data: packagesResponse, isLoading: loadingPackages } = useGetActivePackagesQuery(undefined);
+  const { data: packagesResponse, isLoading: loadingPackages } =
+    useGetActivePackagesQuery(undefined);
   const packages = packagesResponse?.data || [];
+
+  // Check if user already has an active subscription
+  const { data: subscriptionData, isLoading: loadingSubscription } = useGetSubscriptionsQuery({});
+
+  const subscription = subscriptionData?.data;
+  const activeSubscription =
+    subscription?.status === 'active' || subscription?.status === 'trial'
+      ? subscription
+      : undefined;
 
   // Set default package if not specified
   useEffect(() => {
@@ -61,10 +75,38 @@ const StartTrialPage = () => {
     });
   };
 
-  if (loadingPackages) {
+  if (loadingPackages || loadingSubscription) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <Loader2 className="w-10 h-10 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  // Show message if user already has active subscription
+  if (activeSubscription) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-md mx-auto">
+          <div className="bg-white rounded-lg shadow-sm p-8 text-center">
+            <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <AlertCircle className="w-8 h-8 text-yellow-600" />
+            </div>
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">Already Subscribed</h1>
+            <p className="text-gray-600 mb-6">
+              You already have an active {activeSubscription.status === 'trial' ? 'trial ' : ''}
+              subscription to {activeSubscription.packageId?.name || 'Premium'}.
+            </p>
+            <div className="space-y-3">
+              <Button onClick={() => navigate('/subscription')} className="w-full">
+                Manage Subscription
+              </Button>
+              <Button variant="outline" onClick={() => navigate('/')} className="w-full">
+                Go to Home
+              </Button>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -74,11 +116,7 @@ const StartTrialPage = () => {
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <Button
-            variant="ghost"
-            className="mb-4"
-            onClick={() => navigate(-1)}
-          >
+          <Button variant="ghost" className="mb-4" onClick={() => navigate(-1)}>
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back
           </Button>
@@ -91,32 +129,30 @@ const StartTrialPage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Left: Package Selection */}
           <div className="space-y-6">
-            {/* Interval Toggle */}
+            {/* billingPeriod Toggle */}
             <div className="bg-white rounded-lg p-1 inline-flex shadow-sm">
               <button
                 className={cn(
                   'px-4 py-2 text-sm font-medium rounded-md transition-colors',
-                  selectedInterval === 'monthly'
+                  selectedbillingPeriod === 'monthly'
                     ? 'bg-primary text-white'
-                    : 'text-gray-600 hover:text-gray-900'
+                    : 'text-gray-600 hover:text-gray-900',
                 )}
-                onClick={() => setSelectedInterval('monthly')}
+                onClick={() => setSelectedbillingPeriod('monthly')}
               >
                 Monthly
               </button>
               <button
                 className={cn(
                   'px-4 py-2 text-sm font-medium rounded-md transition-colors',
-                  selectedInterval === 'yearly'
+                  selectedbillingPeriod === 'yearly'
                     ? 'bg-primary text-white'
-                    : 'text-gray-600 hover:text-gray-900'
+                    : 'text-gray-600 hover:text-gray-900',
                 )}
-                onClick={() => setSelectedInterval('yearly')}
+                onClick={() => setSelectedbillingPeriod('yearly')}
               >
                 Yearly
-                <span className="ml-1 text-xs text-green-600 font-normal">
-                  Save 20%
-                </span>
+                <span className="ml-1 text-xs text-green-600 font-normal">Save 20%</span>
               </button>
             </div>
 
@@ -126,8 +162,10 @@ const StartTrialPage = () => {
                 .filter((pkg: any) => pkg.slug !== 'free')
                 .map((pkg: any) => {
                   const monthlyPrice = pkg.specialMonthlyPrice || pkg.baseMonthlyPrice;
-                  const yearlyPrice = pkg.specialAnnualPrice || pkg.baseAnnualPrice || monthlyPrice * 12 * 0.8;
-                  const displayPrice = selectedInterval === 'yearly' ? yearlyPrice : monthlyPrice;
+                  const yearlyPrice =
+                    pkg.specialAnnualPrice || pkg.baseAnnualPrice || monthlyPrice * 12 * 0.8;
+                  const displayPrice =
+                    selectedbillingPeriod === 'yearly' ? yearlyPrice : monthlyPrice;
                   const isSelected = pkg._id === selectedPackageId;
 
                   return (
@@ -137,7 +175,7 @@ const StartTrialPage = () => {
                         'w-full text-left p-4 rounded-lg border-2 transition-all',
                         isSelected
                           ? 'border-primary bg-primary/5 shadow-md'
-                          : 'border-gray-200 bg-white hover:border-gray-300'
+                          : 'border-gray-200 bg-white hover:border-gray-300',
                       )}
                       onClick={() => setSelectedPackageId(pkg._id)}
                     >
@@ -154,26 +192,24 @@ const StartTrialPage = () => {
                             )}
                           </div>
                           <p className="text-gray-500 text-sm mt-1">
-                            {typeof pkg.description === 'object' 
-                              ? pkg.description[language] 
+                            {typeof pkg.description === 'object'
+                              ? pkg.description[language]
                               : pkg.description || 'Full access to all features'}
                           </p>
                         </div>
                         <div
                           className={cn(
                             'w-5 h-5 rounded-full border-2 flex items-center justify-center',
-                            isSelected ? 'border-primary bg-primary' : 'border-gray-300'
+                            isSelected ? 'border-primary bg-primary' : 'border-gray-300',
                           )}
                         >
                           {isSelected && <Check className="w-3 h-3 text-white" />}
                         </div>
                       </div>
                       <div className="mt-3">
-                        <span className="text-2xl font-bold">
-                          SAR {displayPrice.toFixed(0)}
-                        </span>
+                        <span className="text-2xl font-bold">SAR {displayPrice.toFixed(0)}</span>
                         <span className="text-gray-500">
-                          /{selectedInterval === 'yearly' ? 'year' : 'month'}
+                          /{selectedbillingPeriod === 'yearly' ? 'year' : 'month'}
                         </span>
                       </div>
                       {/* Features */}
@@ -199,13 +235,15 @@ const StartTrialPage = () => {
               <StartTrialCardForm
                 packageId={selectedPackage._id}
                 packageName={
-                  typeof selectedPackage.name === 'object' 
-                    ? selectedPackage.name[language] 
+                  typeof selectedPackage.name === 'object'
+                    ? selectedPackage.name[language]
                     : selectedPackage.name
                 }
-                monthlyPrice={selectedPackage.specialMonthlyPrice || selectedPackage.baseMonthlyPrice}
+                monthlyPrice={
+                  selectedPackage.specialMonthlyPrice || selectedPackage.baseMonthlyPrice
+                }
                 yearlyPrice={selectedPackage.specialAnnualPrice || selectedPackage.baseAnnualPrice}
-                interval={selectedInterval}
+                billingPeriod={selectedbillingPeriod}
                 trialDays={7}
                 currency="SAR"
                 onSuccess={handleSuccess}

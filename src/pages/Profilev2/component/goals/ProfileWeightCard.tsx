@@ -171,7 +171,7 @@ const ProfileWeightCard: React.FC<ProfileWeightCardProps> = ({
                             tickLine={false}
                             tick={{ fill: '#98A2B3', fontSize: 10, fontWeight: 500 }}
                             dy={10}
-                            interval="preserveStartEnd"
+                            billingPeriod="preserveStartEnd"
                         />
                         <Tooltip
                             contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)', padding: '8px 12px' }}

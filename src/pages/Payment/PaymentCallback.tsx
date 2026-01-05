@@ -11,7 +11,7 @@ const PaymentCallback = () => {
 
   const { data: orderResponse, isFetching } = useGetOrderByIdQuery(orderId, {
     skip: !orderId,
-    pollingInterval: 2500,
+    pollingbillingPeriod: 2500,
   });
 
   const order = orderResponse?.data;

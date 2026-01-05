@@ -23,11 +23,11 @@ const PaymentSuccess = () => {
 
       const randomInRange = (min: number, max: number) => Math.random() * (max - min) + min;
 
-      const interval: any = setInterval(function () {
+      const billingPeriod: any = setbillingPeriod(function () {
         const timeLeft = animationEnd - Date.now();
 
         if (timeLeft <= 0) {
-          return clearInterval(interval);
+          return clearbillingPeriod(billingPeriod);
         }
 
         const particleCount = 50 * (timeLeft / duration);
@@ -43,7 +43,7 @@ const PaymentSuccess = () => {
         });
       }, 250);
 
-      return () => clearInterval(interval);
+      return () => clearbillingPeriod(billingPeriod);
     }
   }, [order?.status]);
 
@@ -81,7 +81,7 @@ const PaymentSuccess = () => {
             <h3 className="font-semibold text-lg text-gray-900 mb-1">
               {packageDetails?.name?.en || 'Premium Subscription'}
             </h3>
-            <p className="text-sm text-gray-500 capitalize mb-4">{order.interval} Plan</p>
+            <p className="text-sm text-gray-500 capitalize mb-4">{order.billingPeriod} Plan</p>
 
             <div className="flex justify-between text-sm text-gray-600 border-t pt-4">
               <span>Amount Paid</span>

@@ -34,10 +34,10 @@ export const VerifyOtp = (): JSX.Element => {
   // Countdown effect
   useEffect(() => {
     if (resendCooldown === 0) return;
-    const interval = setInterval(() => {
+    const billingPeriod = setbillingPeriod(() => {
       setResendCooldown((prev) => prev - 1);
     }, 1000);
-    return () => clearInterval(interval);
+    return () => clearbillingPeriod(billingPeriod);
   }, [resendCooldown]);
 
   const handleChange = (element: HTMLInputElement, index: number) => {

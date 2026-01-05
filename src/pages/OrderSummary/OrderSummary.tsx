@@ -63,7 +63,7 @@ const OrderSummary = () => {
                 <h3 className="font-semibold text-lg text-primary">
                   {packageDetails?.name?.en || 'Premium Package'}
                 </h3>
-                <p className="text-sm text-gray-500 capitalize">{order.interval} Subscription</p>
+                <p className="text-sm text-gray-500 capitalize">{order.billingPeriod} Subscription</p>
               </div>
               {/* You might want to display features here or keep it simple */}
             </div>

@@ -3,7 +3,7 @@ export interface Plan {
   name: string;
   price: number;
   currency: string;
-  interval: 'month' | 'year';
+  billingPeriod: 'month' | 'year';
   features: string[];
 }
 

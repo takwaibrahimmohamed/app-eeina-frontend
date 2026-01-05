@@ -8,16 +8,16 @@ import { cn } from '@/lib/utils';
 
 interface PackagePlanProps {
   packages: Package[];
-  interval: 'monthly' | 'yearly';
-  setInterval: (interval: 'monthly' | 'yearly') => void;
+  billingPeriod: 'monthly' | 'yearly';
+  setbillingPeriod: (billingPeriod: 'monthly' | 'yearly') => void;
   onStartTrial: (pkg: Package) => void;
   activePackageId: string | undefined;
 }
 
 const PackagePlan = ({
   packages,
-  interval,
-  setInterval,
+  billingPeriod,
+  setbillingPeriod,
   onStartTrial,
   activePackageId,
 }: PackagePlanProps) => {
@@ -40,14 +40,14 @@ const PackagePlan = ({
         {t.Package.upgradeanytimedusc}
       </p>
 
-      {/* Interval Toggle */}
+      {/* billingPeriod Toggle */}
       <div className="flex items-center gap-4 bg-gray-100 p-1 rounded-full mt-6">
         <Button
           variant="ghost"
-          onClick={() => setInterval('monthly')}
+          onClick={() => setbillingPeriod('monthly')}
           className={cn(
             'rounded-full px-6 py-2 h-10 transition-all',
-            interval === 'monthly'
+            billingPeriod === 'monthly'
               ? 'bg-white shadow-sm text-black'
               : 'text-gray-500 hover:text-black',
           )}
@@ -56,10 +56,10 @@ const PackagePlan = ({
         </Button>
         <Button
           variant="ghost"
-          onClick={() => setInterval('yearly')}
+          onClick={() => setbillingPeriod('yearly')}
           className={cn(
             'rounded-full px-6 py-2 h-10 transition-all',
-            interval === 'yearly'
+            billingPeriod === 'yearly'
               ? 'bg-white shadow-sm text-black'
               : 'text-gray-500 hover:text-black',
           )}
@@ -71,7 +71,7 @@ const PackagePlan = ({
       <div className="flex flex-col gap-5 lg:gap-10 my-10 mt-16 w-full">
         <PlanCard
           packages={packages}
-          interval={interval}
+          billingPeriod={billingPeriod}
           onStartTrial={onStartTrial}
           activePackageId={activePackageId}
         />

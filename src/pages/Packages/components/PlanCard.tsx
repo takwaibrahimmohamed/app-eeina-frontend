@@ -8,14 +8,14 @@ import { Package } from "@/types/Package";
 
 interface PlanCardProps {
   packages: Package[];
-  interval: "monthly" | "yearly";
+  billingPeriod: "monthly" | "yearly";
   onStartTrial: (pkg: Package) => void;
   activePackageId: string | undefined;
 }
 
 const PlanCard = ({
   packages,
-  interval,
+  billingPeriod,
   onStartTrial,
   activePackageId,
 }: PlanCardProps) => {
@@ -26,7 +26,7 @@ const PlanCard = ({
       {packages.map((pkg) => {
         const isBestDeal = pkg.bestDeal;
         const price =
-          interval === "monthly" ? pkg.baseMonthlyPrice : pkg.baseAnnualPrice;
+          billingPeriod === "monthly" ? pkg.baseMonthlyPrice : pkg.baseAnnualPrice;
         const currency = "SAR"; // Hardcoded or from API if available (API didn't show currency)
 
         const isFreePkg = pkg.slug === "free";
@@ -60,7 +60,7 @@ const PlanCard = ({
               {/* Show discount badge if yearly and special price exists, or just hardcoded for now? 
                    The API has specialAnnualPrice. If it is lower, we can show discount. 
                    For now, omitting specific discount badge logic unless 'premium' */}
-              {interval === "yearly" &&
+              {billingPeriod === "yearly" &&
                 pkg.baseAnnualPrice < pkg.baseMonthlyPrice * 12 && (
                   <Badge className="bg-[#D5F5E3] rounded-[6px] text-[#2ECC71] text-[13px] font-normal">
                     Save{" "}
@@ -77,7 +77,7 @@ const PlanCard = ({
               <span className="text-[19px]">{currency} </span>
               <span className="text-[33px]">{price} / </span>
               <span className="text-[18px] font-normal text-[#878787]">
-                {interval === "monthly" ? t.Package.month : t.Package.annual}
+                {billingPeriod === "monthly" ? t.Package.month : t.Package.annual}
               </span>
             </h2>
 

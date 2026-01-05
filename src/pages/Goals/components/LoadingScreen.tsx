@@ -21,17 +21,17 @@ const LoadingScreen = () => {
   ];
 
   useEffect(() => {
-    const stepInterval = setInterval(() => {
+    const stepbillingPeriod = setbillingPeriod(() => {
       setCurrentStep((prev) => (prev + 1) % steps.length);
     }, 3000); // Change step every 3 seconds
 
-    const quoteInterval = setInterval(() => {
+    const quotebillingPeriod = setbillingPeriod(() => {
       setCurrentQuote((prev) => (prev + 1) % quotes.length);
     }, 5000); // Change quote every 5 seconds
 
     return () => {
-      clearInterval(stepInterval);
-      clearInterval(quoteInterval);
+      clearbillingPeriod(stepbillingPeriod);
+      clearbillingPeriod(quotebillingPeriod);
     };
   }, [steps.length, quotes.length]);
 

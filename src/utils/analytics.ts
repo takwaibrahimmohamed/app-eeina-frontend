@@ -33,7 +33,7 @@ const STORAGE_KEYS = {
 
 const CONFIG = {
   BATCH_SIZE: 100,
-  FLUSH_INTERVAL_MS: 5 * 60 * 1000, // 5 minutes
+  FLUSH_interval_MS: 5 * 60 * 1000, // 5 minutes
   SESSION_TIMEOUT_MS: 30 * 60 * 1000, // 30 minutes
   API_URL: import.meta.env.VITE_API_URL || '/api/v1',
 } as const;
@@ -228,7 +228,7 @@ class AnalyticsTracker {
     // Start flush timer
     this.flushTimer = setInterval(() => {
       flushEvents();
-    }, CONFIG.FLUSH_INTERVAL_MS);
+    }, CONFIG.FLUSH_interval_MS);
 
     // Track page visibility changes
     document.addEventListener('visibilitychange', this.handleVisibilityChange);

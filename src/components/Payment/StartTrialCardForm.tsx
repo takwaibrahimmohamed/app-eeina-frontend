@@ -1,14 +1,14 @@
 /**
  * StartTrialCardForm Component
- * 
+ *
  * A React component that handles the free trial signup flow with Tap Payments.
- * 
+ *
  * FLOW:
  * 1. Load Tap Card SDK dynamically
  * 2. Render secure card input form
  * 3. Tokenize card on submit (never send raw card data)
  * 4. Send token to backend to start trial
- * 
+ *
  * SECURITY:
  * - Uses Tap SDK for card tokenization (PCI compliant)
  * - Only the token (tok_xxx) is sent to backend
@@ -30,7 +30,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2, ShieldCheck, CreditCard, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
-import { useStartTrialMutation, useCreateCustomerMutation } from '@/redux/Features/Payment/PaymentApi';
+import { useStartTrialMutation } from '@/redux/Features/Subscriptions/subscriptionApi';
+import { useCreateCustomerMutation } from '@/redux/Features/Payment/PaymentApi';
 import { useAppSelector } from '@/hooks/hook';
 
 // Public key - safe to expose in frontend
@@ -45,8 +46,8 @@ export interface StartTrialCardFormProps {
   monthlyPrice?: number;
   /** Price per year (for display only) */
   yearlyPrice?: number;
-  /** Billing interval */
-  interval?: 'monthly' | 'yearly';
+  /** Billing billingPeriod */
+  billingPeriod?: 'monthly' | 'yearly';
   /** Number of trial days */
   trialDays?: number;
   /** Currency for display */
@@ -61,13 +62,13 @@ export interface StartTrialCardFormProps {
 
 /**
  * StartTrialCardForm - Secure card collection for free trial signup
- * 
+ *
  * This component:
  * 1. Loads the Tap Payment SDK
  * 2. Renders a secure card input form
  * 3. Handles card tokenization
  * 4. Sends the token (not card data) to the backend
- * 
+ *
  * @example
  * ```tsx
  * <StartTrialCardForm
@@ -84,7 +85,7 @@ export const StartTrialCardForm: React.FC<StartTrialCardFormProps> = ({
   packageName = 'Premium',
   monthlyPrice = 0,
   yearlyPrice,
-  interval = 'monthly',
+  billingPeriod = 'monthly',
   trialDays = 7,
   currency = 'SAR',
   onSuccess,
@@ -98,8 +99,8 @@ export const StartTrialCardForm: React.FC<StartTrialCardFormProps> = ({
   const [tokenId, setTokenId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  console.log("can Submit:", tapReady, isCardValid, isTokenizing, !tokenId);
-  
+  console.log('can Submit:', tapReady, isCardValid, isTokenizing, !tokenId);
+
   // Ref to prevent duplicate API calls
   const processedTokenRef = useRef<string | null>(null);
 
@@ -132,7 +133,7 @@ export const StartTrialCardForm: React.FC<StartTrialCardFormProps> = ({
   const phone = (user as any)?.phone as string | undefined;
   const phoneNormalized = phone?.replace(/\s/g, '') || '';
   const phoneCountryCode = phoneNormalized.startsWith('+')
-    ? (phoneNormalized.match(/^\+(\d{1,3})/)?.[1] ?? '966')
+    ? phoneNormalized.match(/^\+(\d{1,3})/)?.[1] ?? '966'
     : '966';
   const phoneNumber = phoneNormalized.replace(/^\+?\d{1,4}/, '').replace(/\D/g, '') || '';
 
@@ -140,17 +141,24 @@ export const StartTrialCardForm: React.FC<StartTrialCardFormProps> = ({
   const tapCurrency = (Currencies as any)[currency.toUpperCase()] ?? Currencies.SAR;
 
   // Calculate display amount (for display only - backend determines actual charge)
-  const displayAmount = interval === 'yearly' ? (yearlyPrice || monthlyPrice * 12) : monthlyPrice;
+  const displayAmount =
+    billingPeriod === 'yearly' ? yearlyPrice || monthlyPrice * 12 : monthlyPrice;
 
   // Memoize TapCard props to prevent unnecessary re-renders/re-initializations
-  const tapTransaction = useMemo(() => ({
-    amount: Math.max(displayAmount, 1),
-    currency: tapCurrency,
-  }), [displayAmount, tapCurrency]);
+  const tapTransaction = useMemo(
+    () => ({
+      amount: Math.max(displayAmount, 1),
+      currency: tapCurrency,
+    }),
+    [displayAmount, tapCurrency],
+  );
 
-  const tapFields = useMemo(() => ({
-    cardHolder: true,
-  }), []);
+  const tapFields = useMemo(
+    () => ({
+      cardHolder: true,
+    }),
+    [],
+  );
 
   const tapCustomer = useMemo(() => {
     const contact: any = {};
@@ -178,30 +186,40 @@ export const StartTrialCardForm: React.FC<StartTrialCardFormProps> = ({
 
   console.log('Tap Config:', { tapTransaction, tapCustomer });
 
-  const tapAddons = useMemo(() => ({
-    displayPaymentBrands: true,
-    loader: true,
-    saveCard: true,
-  }), []);
+  const tapAddons = useMemo(
+    () => ({
+      displayPaymentBrands: true,
+      loader: true,
+      saveCard: true,
+    }),
+    [],
+  );
 
-  const tapInterface = useMemo(() => ({
-    locale: Locale.EN,
-    theme: Theme.LIGHT,
-    edges: Edges.CURVED,
-    direction: Direction.LTR,
-  }), []);
+  const tapInterface = useMemo(
+    () => ({
+      locale: Locale.EN,
+      theme: Theme.LIGHT,
+      edges: Edges.CURVED,
+      direction: Direction.LTR,
+    }),
+    [],
+  );
 
   // Acceptance configuration - supported cards and payment methods
-  const tapAcceptance = useMemo(() => ({
-    supportedBrands: ['VISA', 'MASTERCARD', 'AMERICAN_EXPRESS', 'MADA'],
-    supportedCards: ['DEBIT', 'CREDIT'],
-  }), []);
+  const tapAcceptance = useMemo(
+    () => ({
+      supportedBrands: ['VISA', 'MASTERCARD', 'AMERICAN_EXPRESS', 'MADA'],
+      supportedCards: ['DEBIT', 'CREDIT'],
+    }),
+    [],
+  );
 
   // Configuration check
   const configError = !TAP_PUBLIC_KEY ? 'Tap public key is missing. Contact support.' : null;
 
   // Can submit check
-  const canSubmit = tapReady && isCardValid && !isTokenizing && !isStartingTrial && !tokenId && !configError;
+  const canSubmit =
+    tapReady && isCardValid && !isTokenizing && !isStartingTrial && !tokenId && !configError;
 
   console.log('IS CARD VALID:', isCardValid, 'CAN SUBMIT:', canSubmit);
 
@@ -209,7 +227,7 @@ export const StartTrialCardForm: React.FC<StartTrialCardFormProps> = ({
    * Handle form submission - triggers card tokenization
    */
   const handleSubmit = useCallback(() => {
-    console.log("StartTrialCardForm handleSubmit", canSubmit);
+    console.log('StartTrialCardForm handleSubmit', canSubmit);
     if (!canSubmit) return;
 
     setError(null);
@@ -235,14 +253,14 @@ export const StartTrialCardForm: React.FC<StartTrialCardFormProps> = ({
   useEffect(() => {
     const processToken = async () => {
       if (!tokenId || processedTokenRef.current === tokenId) return;
-      
+
       processedTokenRef.current = tokenId;
 
       try {
         const result = await startTrial({
           tokenId,
           packageId,
-          interval,
+          billingPeriod,
         }).unwrap();
 
         toast.success('Free trial started successfully!');
@@ -253,7 +271,7 @@ export const StartTrialCardForm: React.FC<StartTrialCardFormProps> = ({
         setError(errorMessage);
         toast.error(errorMessage);
         onError?.(err);
-        
+
         // Reset for retry
         setTokenId(null);
         processedTokenRef.current = null;
@@ -261,7 +279,7 @@ export const StartTrialCardForm: React.FC<StartTrialCardFormProps> = ({
     };
 
     processToken();
-  }, [tokenId, packageId, interval, startTrial, onSuccess, onError]);
+  }, [tokenId, packageId, billingPeriod, startTrial, onSuccess, onError]);
 
   // Loading state
   const isProcessing = isTokenizing || isStartingTrial || !!tokenId;
@@ -294,7 +312,9 @@ export const StartTrialCardForm: React.FC<StartTrialCardFormProps> = ({
         <div className="bg-gray-50 p-4 rounded-md space-y-2">
           <div className="flex justify-between text-sm">
             <span className="text-gray-600">Plan</span>
-            <span className="font-medium">{packageName} ({interval})</span>
+            <span className="font-medium">
+              {packageName} ({billingPeriod})
+            </span>
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-gray-600">Free trial</span>
@@ -303,7 +323,7 @@ export const StartTrialCardForm: React.FC<StartTrialCardFormProps> = ({
           <div className="flex justify-between text-sm">
             <span className="text-gray-600">Then</span>
             <span className="font-medium">
-              {currency} {displayAmount.toFixed(2)}/{interval === 'yearly' ? 'year' : 'month'}
+              {currency} {displayAmount.toFixed(2)}/{billingPeriod === 'yearly' ? 'year' : 'month'}
             </span>
           </div>
         </div>
@@ -338,7 +358,7 @@ export const StartTrialCardForm: React.FC<StartTrialCardFormProps> = ({
                   return;
                 }
                 // Check for isAllInputsValid or fallback to truthy if object
-                const isValid = v?.isAllInputsValid ?? true; 
+                const isValid = v?.isAllInputsValid ?? true;
                 setIsCardValid(Boolean(isValid));
               }}
               onInvalidInput={(error: any) => {
@@ -389,11 +409,7 @@ export const StartTrialCardForm: React.FC<StartTrialCardFormProps> = ({
             {isProcessing && (
               <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
                 <Loader2 className="w-4 h-4 animate-spin" />
-                <span>
-                  {isTokenizing
-                    ? 'Securing your card...'
-                    : 'Setting up your trial...'}
-                </span>
+                <span>{isTokenizing ? 'Securing your card...' : 'Setting up your trial...'}</span>
               </div>
             )}
 

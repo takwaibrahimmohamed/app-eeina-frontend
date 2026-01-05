@@ -82,7 +82,7 @@ export const SubscriptionOverview: React.FC<SubscriptionOverviewProps> = ({
             <div className="mt-1 flex items-baseline gap-2">
               <h2 className="text-3xl font-bold text-gray-900">{plan.name}</h2>
               <span className="bg-white/50 px-2 py-0.5 rounded text-xs font-semibold uppercase tracking-wide text-gray-500 border border-gray-200">
-                {plan.interval}ly
+                {plan.billingPeriod}ly
               </span>
             </div>
           </div>
@@ -108,7 +108,7 @@ export const SubscriptionOverview: React.FC<SubscriptionOverviewProps> = ({
               <p className="text-lg font-semibold text-gray-900">
                 {plan.currency.toUpperCase()} {plan.price.toFixed(2)}{" "}
                 <span className="text-sm font-normal text-gray-400">
-                  / {plan.interval}
+                  / {plan.billingPeriod}
                 </span>
               </p>
             </div>

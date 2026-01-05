@@ -1,24 +1,28 @@
 import { useState } from 'react';
-import {
-  useGetActivePackagesQuery,
-} from '@/redux/Features/Package/PackageApi';
+import { useGetActivePackagesQuery } from '@/redux/Features/Package/PackageApi';
 import { useNavigate } from 'react-router-dom';
 import Loader from '@/components/ui/Loader';
 import PackagePlan from './components/PackagePlan';
 import SecurePayments from './components/SecurePyament';
 import PackageFAQ from './components/PackageFAQ';
-import { useGetUserSubscriptionsQuery } from '@/redux/Features/Subscriptions/subscriptionApi';
+import { useGetSubscriptionsQuery } from '@/redux/Features/Subscriptions/subscriptionApi';
 import { useAppSelector } from '@/hooks/hook';
 import { toast } from 'sonner';
 
 const Packages = () => {
-  const [interval, setInterval] = useState<'monthly' | 'yearly'>('monthly');
+  const [billingPeriod, setbillingPeriod] = useState<'monthly' | 'yearly'>('monthly');
   const { data: packagesData, isLoading, error } = useGetActivePackagesQuery({});
-  const { data: subscriptionsData } = useGetUserSubscriptionsQuery({});
-  const navigate = useNavigate();
   const user = useAppSelector((s) => s.auth.user);
 
+  // Fetch subscription for current user
+  const { data: subscriptionsData } = useGetSubscriptionsQuery({});
+  const navigate = useNavigate();
+
   const packages = packagesData?.data || [];
+
+  // Get active subscription
+  // The API returns the subscription object directly in data
+  const activeSubscription = subscriptionsData?.data;
 
   /**
    * Handle "Start Free Trial" or "Buy Now" click
@@ -29,16 +33,15 @@ const Packages = () => {
     // Require authentication
     if (!user) {
       toast.info('Please login to start your free trial');
-      navigate(`/login?redirect=/start-trial?package=${pkg._id}&interval=${interval}`);
+      navigate(`/login?redirect=/start-trial?package=${pkg._id}&billingPeriod=${billingPeriod}`);
       return;
     }
 
-    // Navigate to trial page with package and interval
-    navigate(`/start-trial?package=${pkg._id}&interval=${interval}`);
+    // Navigate to trial page with package and billingPeriod
+    navigate(`/start-trial?package=${pkg._id}&billingPeriod=${billingPeriod}`);
   };
 
-  const subscription = subscriptionsData?.data;
-  console.log('User Subscription:', subscription);
+  console.log('User Subscription:', activeSubscription);
 
   if (isLoading) return <Loader />;
   if (error) return <div className="text-center py-20">Error loading packages</div>;
@@ -46,10 +49,10 @@ const Packages = () => {
   return (
     <div className="container max-w-6xl xl2:max-w-7xl mx-auto px-6 py-8 mb-12 md:mb-16 lg:mb-0">
       <PackagePlan
-        activePackageId={subscription?.packageId}
+        activePackageId={activeSubscription?.packageId?._id}
         packages={packages}
-        interval={interval}
-        setInterval={setInterval}
+        billingPeriod={billingPeriod}
+        setbillingPeriod={setbillingPeriod}
         onStartTrial={handleStartTrial}
       />
       <SecurePayments />

@@ -175,6 +175,6 @@ export const ANALYTICS_STORAGE_KEYS = {
 // Config
 export const ANALYTICS_CONFIG = {
   BATCH_SIZE: 100,
-  FLUSH_INTERVAL_MS: 5 * 60 * 1000, // 5 minutes
+  FLUSH_billingPeriod_MS: 5 * 60 * 1000, // 5 minutes
   SESSION_TIMEOUT_MS: 30 * 60 * 1000, // 30 minutes
 } as const;

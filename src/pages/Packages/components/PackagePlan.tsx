@@ -78,6 +78,7 @@ const PackagePlan = ({
 
         <PlanFeaturesCard
           packages={packages}
+          billingPeriod={billingPeriod}
           onStartTrial={onStartTrial}
           activePackageId={activePackageId}
         />

@@ -80,6 +80,35 @@ const ShoppingListApi = baseApi.injectEndpoints({
         method: 'PATCH',
         body: { status, token },
       }),
+      async onQueryStarted({ listId, itemId, status, token }, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          ShoppingListApi.util.updateQueryData('getSingleList', { id: listId, token }, (draft) => {
+            if (!draft?.data) return;
+
+            // Function to find and update item in an array
+            const updateInArray = (arr: any[]) => {
+              if (!arr) return false;
+              const item = arr.find((i) => i._id === itemId);
+              if (item) {
+                item.status = status;
+                return true;
+              }
+              return false;
+            };
+
+            // Try updating in items (Recipe Items)
+            if (!updateInArray(draft.data.items)) {
+              // If not found, try updating in customItems
+              updateInArray(draft.data.customItems);
+            }
+          })
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
       invalidatesTags: ['ListDetails'],
     }),
 

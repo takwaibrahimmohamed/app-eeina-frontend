@@ -62,4 +62,12 @@ export const shoppingList: ShoppingListTranslations = {
   continue: 'Continue',
   choose_store: 'Choose Store',
   choose: 'Choose',
+  search_ingredients: 'Search ingredients...',
+  item_already_exists: 'Item might already exist in your list',
+  item_added_success: 'Item added successfully',
+  add: 'Add',
+  clear_all_items: 'Clear All Items',
+  confirm_clear_all: 'Are you sure you want to clear all items from your list?',
+  all_items_cleared_success: 'All items cleared successfully',
+  clear_all_failed: 'Failed to clear some items',
 };

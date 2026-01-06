@@ -60,4 +60,12 @@ export interface ShoppingListTranslations {
   continue: string;
   choose_store: string;
   choose: string;
+  search_ingredients: string;
+  item_already_exists: string;
+  item_added_success: string;
+  add: string;
+  clear_all_items: string;
+  confirm_clear_all: string;
+  all_items_cleared_success: string;
+  clear_all_failed: string;
 }

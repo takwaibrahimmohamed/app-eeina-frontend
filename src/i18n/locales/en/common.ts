@@ -29,4 +29,5 @@ export const common: CommonTranslations = {
   done: 'Done',
   generating: 'Generating...',
   error_occurred: 'An error occurred',
+  no_results: 'No results found',
 };

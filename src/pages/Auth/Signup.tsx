@@ -16,8 +16,17 @@ import { useAppSelector } from "../../hooks/hook";
 import { useReferralsTrackMutation } from "@/redux/Features/referrals/referralApi";
 import { analytics } from "@/utils/analytics";
 import { getLocalizedPath } from "@/lib/getLocalizedPath";
+
 import { trackIfAllowed } from "@/utils/analyticsHelper";
 import { FacebookIcon, Google } from "@/assets";
+import { countries } from "@/data/countries";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 // Get API URL from environment
 const API_URL = import.meta.env.VITE_API_URL;
@@ -25,6 +34,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 export const Signup = (): JSX.Element => {
   const { language, t, isRTL } = useLanguage();
   const [showPassword, setShowPassword] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState(countries.find(c => c.code === "SA") || countries[0]);
   // const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(0);
   const [signUp] = useSignupMutation();
@@ -75,7 +85,14 @@ export const Signup = (): JSX.Element => {
   const onSubmit = async (data: SignupFormData) => {
     try {
       const referralCode = localStorage.getItem("referral_code");
-      const payload = referralCode ? { ...data, referralCode } : data;
+
+      // Format phone number with selected country dial code if it exists
+      const formattedData = { ...data };
+      if (formattedData.phone) {
+        formattedData.phone = `${selectedCountry.dialCode}${formattedData.phone}`;
+      }
+
+      const payload = referralCode ? { ...formattedData, referralCode } : formattedData;
       await signUp(payload).unwrap();
       toast.success(t.auth.signup_success);
 
@@ -163,22 +180,54 @@ export const Signup = (): JSX.Element => {
                     )}
                   </div>
                   <div className="relative w-full col-span-12 lg:col-span-6">
-                    <input
-                      type="tel"
-                      placeholder={t.auth.phone_number} // or enter_phone
-                      {...register("phone")}
-                      className=" block h-12 w-full px-3 pb-2.5 pt-4 text-[14px] xl2:text-base text-gray-800 !bg-white rounded-xl border border-gray-300 appearance-none focus:outline-none focus:ring-1 focus:ring-[#DCDBDD] focus:border-[#DCDBDD] peer"
-                    />
-                    <label
-                      htmlFor="floating_outlined"
-                      className="absolute text-[14px] md:text-[16px] text-[#84818A] duration-300 transform -translate-y-1/2 top-1/2 z-10 origin-[0] bg-[#FBFCFC] px-2 peer-focus:top-2 peer-focus:scale-75 
-                        peer-focus:-translate-y-4 peer-focus:text-[#84818A] 
-                        peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 
-                         peer-valid:top-2 peer-valid:scale-75 peer-valid:-translate-y-4
-                        start-3"
-                    >
-                      {t.auth.phone_number}
-                    </label>
+                    <div className="relative flex items-center h-12 w-full rounded-xl border border-gray-300 focus-within:ring-1 focus-within:ring-[#DCDBDD] focus-within:border-[#DCDBDD] bg-white overflow-hidden">
+                      <div className="h-full border-r border-gray-200">
+                        <Select
+                          value={selectedCountry.code}
+                          onValueChange={(value) => {
+                            const country = countries.find((c) => c.code === value);
+                            if (country) setSelectedCountry(country);
+                          }}
+                        >
+                          <SelectTrigger className="h-full border-none bg-gray-50 from-neutral-50 rounded-none px-3 w-[100px] focus:ring-0">
+                            {/* Render selected value manually to show only flag and dial code */}
+                            <div className="flex items-center gap-1">
+                              <span className="mr-1">{selectedCountry.flag}</span>
+                              <span className="text-gray-600 font-medium text-sm">
+                                {selectedCountry.dialCode}
+                              </span>
+                            </div>
+                          </SelectTrigger>
+                          <SelectContent className="max-h-[300px]">
+                            {countries.map((country) => (
+                              <SelectItem key={country.code} value={country.code}>
+                                <span className="mr-2">{country.flag}</span>
+                                <span className="mr-2 text-gray-500">
+                                  ({country.dialCode})
+                                </span>
+                                {country.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <input
+                        type="tel"
+                        maxLength={15}
+                        placeholder={t.auth.phone_number}
+                        {...register("phone")}
+                        className="block h-full w-full px-3 text-[14px] xl2:text-base text-gray-800 bg-transparent border-none outline-none focus:ring-0 placeholder:text-gray-400"
+                        onInput={(e) => {
+                          e.currentTarget.value = e.currentTarget.value.replace(/[^0-9]/g, '');
+                        }}
+                      />
+                    </div>
+                    {/* Floating label kept for consistency if needed, but placeholder is often enough for this pattern. 
+                        Let's keep the error message logic. */}
+                    <div className="absolute -top-2 left-3 bg-white px-1 text-xs text-[#84818A]">
+                      {t.auth.phone_number} (Optional)
+                    </div>
+
                     {errors.phone && (
                       <span className="text-red-500 text-sm mt-1 block">
                         {errors.phone.message}
@@ -245,9 +294,8 @@ export const Signup = (): JSX.Element => {
                         type="button"
                         variant="ghost"
                         size="icon"
-                        className={`absolute top-1/2 transform -translate-y-1/2 hover:bg-transparent ${
-                          isRTL ? "left-3" : "right-3"
-                        } text-gray-400 hover:text-gray-600`}
+                        className={`absolute top-1/2 transform -translate-y-1/2 hover:bg-transparent ${isRTL ? "left-3" : "right-3"
+                          } text-gray-400 hover:text-gray-600`}
                         onClick={() => setShowPassword(!showPassword)}
                       >
                         {showPassword ? (

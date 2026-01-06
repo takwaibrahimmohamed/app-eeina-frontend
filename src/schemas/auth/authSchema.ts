@@ -8,7 +8,7 @@ export const signupSchema = z
     phone: z
       .string()
       .trim()
-      .regex(/^\+?[1-9]\d{1,14}$/, 'Please enter a valid phone number (E.164 format)')
+      .regex(/^\d{7,15}$/, 'Please enter a valid phone number')
       .optional()
       .or(z.literal('')),
     password: z
@@ -18,14 +18,9 @@ export const signupSchema = z
       .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
       .regex(/[0-9]/, 'Password must contain at least one number')
       .regex(/[^A-Za-z0-9]/, 'Password must contain at least one special character'),
-    confirmPassword: z.string(),
     agreeToTerms: z.literal(true, {
       message: 'You must agree to terms',
     }),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    path: ['confirmPassword'],
-    message: 'Passwords do not match',
   });
 
 export type SignupFormData = z.infer<typeof signupSchema>;

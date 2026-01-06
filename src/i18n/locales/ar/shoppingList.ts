@@ -62,4 +62,12 @@ export const shoppingList: ShoppingListTranslations = {
   categories: 'التصنيفات',
   share_list: 'مشاركة',
   export_list: 'تصدير',
+  search_ingredients: 'البحث عن المكونات...',
+  item_already_exists: 'العنصر قد يكون موجودًا بالفعل في قائمتك',
+  item_added_success: 'تمت إضافة العنصر بنجاح',
+  add: 'إضافة',
+  clear_all_items: 'مسح جميع العناصر',
+  confirm_clear_all: 'هل أنت متأكد أنك تريد مسح جميع العناصر من قائمتك؟',
+  all_items_cleared_success: 'تم مسح جميع العناصر بنجاح',
+  clear_all_failed: 'فشل مسح بعض العناصر',
 };

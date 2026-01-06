@@ -7,12 +7,14 @@ interface PlanFeaturesCardProps {
   packages: Package[];
   onStartTrial: (pkg: Package) => void;
   activePackageId: string | undefined;
+  billingPeriod: 'monthly' | 'yearly';
 }
 
 const PlanFeaturesCard = ({
   packages,
   onStartTrial,
   activePackageId,
+  billingPeriod,
 }: PlanFeaturesCardProps) => {
   const { language, t } = useLanguage();
 
@@ -23,6 +25,10 @@ const PlanFeaturesCard = ({
         const isCurrentPlan = pkg._id === activePackageId || (isFreePkg && !activePackageId);
         const showButton = !isFreePkg || isCurrentPlan;
 
+        const price = billingPeriod === 'monthly' ? pkg.baseMonthlyPrice : pkg.baseAnnualPrice;
+        const specialPrice =
+          billingPeriod === 'monthly' ? pkg.specialMonthlyPrice : pkg.specialAnnualPrice;
+
         return (
           <Card
             key={pkg._id}
@@ -30,6 +36,12 @@ const PlanFeaturesCard = ({
           >
             <div className="flex flex-col gap-5">
               <h2 className="font-semibold text-[#6AB240] text-[24px]">{pkg.name[language]}</h2>
+              {specialPrice && specialPrice < price && (
+                <div className="flex items-center gap-2">
+                  <span className="text-gray-400 line-through text-lg block">SAR {price}</span>
+                  <span className="text-[#6AB240] font-bold text-xl block">SAR {specialPrice}</span>
+                </div>
+              )}
               {pkg.features.map((featureObj, idx) => (
                 <p key={idx} className="text-[#606060] text-[20px] font-normal">
                   {featureObj[language]}

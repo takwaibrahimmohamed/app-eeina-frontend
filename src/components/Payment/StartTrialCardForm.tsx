@@ -31,7 +31,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Loader2, ShieldCheck, CreditCard, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { useStartTrialMutation } from '@/redux/Features/Subscriptions/subscriptionApi';
-import { useCreateCustomerMutation } from '@/redux/Features/Payment/PaymentApi';
 import { useAppSelector } from '@/hooks/hook';
 
 // Public key - safe to expose in frontend
@@ -109,33 +108,11 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
 
   // API mutation
   const [startTrial, { isLoading: isStartingTrial }] = useStartTrialMutation();
-  const [createCustomer, { isLoading: isCreatingCustomer }] = useCreateCustomerMutation();
-
-  // Ensure customer ID exists before rendering form
-  useEffect(() => {
-    const ensureCustomer = async () => {
-      if (user && !(user as any).tapCustomerId && !isCreatingCustomer) {
-        try {
-          await createCustomer().unwrap();
-        } catch (err) {
-          console.error('Failed to create Tap customer:', err);
-          setError('Failed to initialize payment system. Please refresh.');
-        }
-      }
-    };
-    ensureCustomer();
-  }, [user, createCustomer, isCreatingCustomer]);
 
   // Customer info for Tap SDK
   const customerFirst = user?.firstName || user?.fullName?.split(' ')?.[0] || 'Customer';
   const customerLast = user?.lastName || user?.fullName?.split(' ')?.slice(1).join(' ') || '';
   const email = user?.email || '';
-  const phone = (user as any)?.phone as string | undefined;
-  const phoneNormalized = phone?.replace(/\s/g, '') || '';
-  const phoneCountryCode = phoneNormalized.startsWith('+')
-    ? phoneNormalized.match(/^\+(\d{1,3})/)?.[1] ?? '966'
-    : '966';
-  const phoneNumber = phoneNormalized.replace(/^\+?\d{1,4}/, '').replace(/\D/g, '') || '';
 
   // Determine currency for Tap SDK
   const tapCurrency = (Currencies as any)[currency.toUpperCase()] ?? Currencies.SAR;
@@ -163,12 +140,6 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
   const tapCustomer = useMemo(() => {
     const contact: any = {};
     if (email) contact.email = email;
-    if (phoneNumber) {
-      contact.phone = {
-        countryCode: phoneCountryCode,
-        number: phoneNumber,
-      };
-    }
 
     return {
       name: [
@@ -182,7 +153,7 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
       editable: true,
       contact: Object.keys(contact).length > 0 ? contact : undefined,
     };
-  }, [customerFirst, customerLast, email, phoneCountryCode, phoneNumber]);
+  }, [customerFirst, customerLast, email]);
 
   console.log('Tap Config:', { tapTransaction, tapCustomer });
 

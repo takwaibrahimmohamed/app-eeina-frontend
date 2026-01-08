@@ -16,7 +16,7 @@
  * - Public key only - secret key is on backend
  */
 
-import { useState, useEffect, useCallback, useRef, useMemo } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import {
   TapCard,
   Currencies,
@@ -25,21 +25,15 @@ import {
   Locale,
   Theme,
   tokenize,
-} from "@tap-payments/card-sdk";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Loader2, ShieldCheck, CreditCard, AlertCircle } from "lucide-react";
-import { toast } from "sonner";
-import { useStartTrialMutation } from "@/redux/Features/Subscriptions/subscriptionApi";
-import { useCreateCustomerMutation } from "@/redux/Features/Payment/PaymentApi";
-import { useAppSelector } from "@/hooks/hook";
-import { useLanguage } from "@/contexts/LanguageContext";
+} from '@tap-payments/card-sdk';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Loader2, ShieldCheck, CreditCard, AlertCircle } from 'lucide-react';
+import { toast } from 'sonner';
+import { useStartTrialMutation } from '@/redux/Features/Subscriptions/subscriptionApi';
+import { useCreateCustomerMutation } from '@/redux/Features/Payment/PaymentApi';
+import { useAppSelector } from '@/hooks/hook';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 // Public key - safe to expose in frontend
 const TAP_PUBLIC_KEY = import.meta.env.VITE_TAP_PUBLIC_KEY;
@@ -54,7 +48,7 @@ export interface PaymentFormProps {
   /** Price per year (for display only) */
   yearlyPrice?: number;
   /** Billing billingPeriod */
-  billingPeriod?: "monthly" | "yearly";
+  billingPeriod?: 'monthly' | 'yearly';
   /** Number of trial days */
   trialDays?: number;
   /** Currency for display */
@@ -89,17 +83,17 @@ export interface PaymentFormProps {
  */
 export const PaymentForm: React.FC<PaymentFormProps> = ({
   packageId,
-  packageName = "Premium",
+  packageName = 'Premium',
   monthlyPrice = 0,
   yearlyPrice,
-  billingPeriod = "monthly",
+  billingPeriod = 'monthly',
   trialDays = 7,
-  currency = "SAR",
+  currency = 'SAR',
   onSuccess,
   onError,
   onCancel,
 }) => {
-  const { t,language } = useLanguage();
+  const { t, language } = useLanguage();
   // State
   const [tapReady, setTapReady] = useState(false);
   const [isCardValid, setIsCardValid] = useState(false);
@@ -107,7 +101,7 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
   const [tokenId, setTokenId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  console.log("can Submit:", tapReady, isCardValid, isTokenizing, !tokenId);
+  console.log('can Submit:', tapReady, isCardValid, isTokenizing, !tokenId);
 
   // Ref to prevent duplicate API calls
   const processedTokenRef = useRef<string | null>(null);
@@ -117,8 +111,7 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
 
   // API mutation
   const [startTrial, { isLoading: isStartingTrial }] = useStartTrialMutation();
-  const [createCustomer, { isLoading: isCreatingCustomer }] =
-    useCreateCustomerMutation();
+  const [createCustomer, { isLoading: isCreatingCustomer }] = useCreateCustomerMutation();
 
   // Ensure customer ID exists before rendering form
   useEffect(() => {
@@ -127,8 +120,8 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
         try {
           await createCustomer().unwrap();
         } catch (err) {
-          console.error("Failed to create Tap customer:", err);
-          setError("Failed to initialize payment system. Please refresh.");
+          console.error('Failed to create Tap customer:', err);
+          setError('Failed to initialize payment system. Please refresh.');
         }
       }
     };
@@ -136,29 +129,16 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
   }, [user, createCustomer, isCreatingCustomer]);
 
   // Customer info for Tap SDK
-  const customerFirst =
-    user?.firstName || user?.fullName?.split(" ")?.[0] || "Customer";
-  const customerLast =
-    user?.lastName || user?.fullName?.split(" ")?.slice(1).join(" ") || "";
-  const email = user?.email || "";
-  const phone = (user as any)?.phone as string | undefined;
-  const phoneNormalized = phone?.replace(/\s/g, "") || "";
-  const phoneCountryCode = phoneNormalized.startsWith("+")
-    ? phoneNormalized.match(/^\+(\d{1,3})/)?.[1] ?? "966"
-    : "966";
-  const phoneNumber =
-    phoneNormalized.replace(/^\+?\d{1,4}/, "").replace(/\D/g, "") || "";
-
+  const customerFirst = user?.firstName || user?.fullName?.split(' ')?.[0] || 'Customer';
+  const customerLast = user?.lastName || user?.fullName?.split(' ')?.slice(1).join(' ') || '';
+  const email = user?.email || '';
 
   // Determine currency for Tap SDK
-  const tapCurrency =
-    (Currencies as any)[currency.toUpperCase()] ?? Currencies.SAR;
+  const tapCurrency = (Currencies as any)[currency.toUpperCase()] ?? Currencies.SAR;
 
   // Calculate display amount (for display only - backend determines actual charge)
   const displayAmount =
-    billingPeriod === "yearly"
-      ? yearlyPrice || monthlyPrice * 12
-      : monthlyPrice;
+    billingPeriod === 'yearly' ? yearlyPrice || monthlyPrice * 12 : monthlyPrice;
 
   // Memoize TapCard props to prevent unnecessary re-renders/re-initializations
   const tapTransaction = useMemo(
@@ -166,14 +146,14 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
       amount: Math.max(displayAmount, 1),
       currency: tapCurrency,
     }),
-    [displayAmount, tapCurrency]
+    [displayAmount, tapCurrency],
   );
 
   const tapFields = useMemo(
     () => ({
       cardHolder: true,
     }),
-    []
+    [],
   );
 
   const tapCustomer = useMemo(() => {
@@ -185,16 +165,16 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
         {
           lang: Locale.EN,
           first: customerFirst,
-          last: customerLast || "-",
+          last: customerLast || '-',
         },
       ],
-      nameOnCard: `${customerFirst} ${customerLast || ""}`.trim(),
+      nameOnCard: `${customerFirst} ${customerLast || ''}`.trim(),
       editable: true,
       contact: Object.keys(contact).length > 0 ? contact : undefined,
     };
   }, [customerFirst, customerLast, email]);
 
-  console.log("Tap Config:", { tapTransaction, tapCustomer });
+  console.log('Tap Config:', { tapTransaction, tapCustomer });
 
   const tapAddons = useMemo(
     () => ({
@@ -202,7 +182,7 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
       loader: true,
       saveCard: true,
     }),
-    []
+    [],
   );
 
   const tapInterface = useMemo(
@@ -212,39 +192,36 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
       edges: Edges.CURVED,
       direction: Direction.LTR,
     }),
-    []
+    [],
   );
 
   // Acceptance configuration - supported cards and payment methods
   const tapAcceptance = useMemo(
     () => ({
-      supportedBrands: ["VISA", "MASTERCARD", "AMERICAN_EXPRESS", "MADA"],
-      supportedCards: ["DEBIT", "CREDIT"],
+      supportedBrands: ['VISA', 'MASTERCARD', 'AMERICAN_EXPRESS', 'MADA'],
+      supportedCards: ['DEBIT', 'CREDIT'],
     }),
-    []
+    [],
   );
 
   // Configuration check
   const configError = !TAP_PUBLIC_KEY
-    ?language=="ar"?"مفتاح Tap العام مفقود. تواصل مع الدعم.":"Tap public key is missing. Contact support."
+    ? language == 'ar'
+      ? 'مفتاح Tap العام مفقود. تواصل مع الدعم.'
+      : 'Tap public key is missing. Contact support.'
     : null;
 
   // Can submit check
   const canSubmit =
-    tapReady &&
-    isCardValid &&
-    !isTokenizing &&
-    !isStartingTrial &&
-    !tokenId &&
-    !configError;
+    tapReady && isCardValid && !isTokenizing && !isStartingTrial && !tokenId && !configError;
 
-  console.log("IS CARD VALID:", isCardValid, "CAN SUBMIT:", canSubmit);
+  console.log('IS CARD VALID:', isCardValid, 'CAN SUBMIT:', canSubmit);
 
   /**
    * Handle form submission - triggers card tokenization
    */
   const handleSubmit = useCallback(() => {
-    console.log("StartTrialCardForm handleSubmit", canSubmit);
+    console.log('StartTrialCardForm handleSubmit', canSubmit);
     if (!canSubmit) return;
 
     setError(null);
@@ -258,9 +235,9 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
       tokenize();
     } catch (e) {
       setIsTokenizing(false);
-      console.error("Tap tokenize failed:", e);
-      setError("Could not start card processing. Please try again.");
-      toast.error("Could not process card. Please try again.");
+      console.error('Tap tokenize failed:', e);
+      setError('Could not start card processing. Please try again.');
+      toast.error('Could not process card. Please try again.');
     }
   }, [canSubmit]);
 
@@ -280,12 +257,11 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
           billingPeriod,
         }).unwrap();
 
-        toast.success("Free trial started successfully!");
+        toast.success('Free trial started successfully!');
         onSuccess?.(result.data);
       } catch (err: any) {
-        console.error("Start trial failed:", err);
-        const errorMessage =
-          err?.data?.message || "Failed to start trial. Please try again.";
+        console.error('Start trial failed:', err);
+        const errorMessage = err?.data?.message || 'Failed to start trial. Please try again.';
         setError(errorMessage);
         toast.error(errorMessage);
         onError?.(err);
@@ -310,9 +286,9 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
           <CardTitle className="text-2xl">{t.payment.StartFreeTrial}</CardTitle>
         </div>
         <CardDescription>
-          {t.payment.TryFreeTrial.replace("{packageName}", packageName).replace(
-            "{trialDays}",
-            String(trialDays)
+          {t.payment.TryFreeTrial.replace('{packageName}', packageName).replace(
+            '{trialDays}',
+            String(trialDays),
           )}
         </CardDescription>
       </CardHeader>
@@ -323,9 +299,7 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
           <ShieldCheck className="w-5 h-5 flex-shrink-0" />
           <div className="text-sm">
             <p className="font-medium">{t.payment.CardSecureTitle}</p>
-            <p className="text-blue-600 text-xs">
-              {t.payment.CardSecureDescription}
-            </p>
+            <p className="text-blue-600 text-xs">{t.payment.CardSecureDescription}</p>
           </div>
         </div>
 
@@ -334,10 +308,8 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
           <div className="flex justify-between text-sm">
             <span className="text-gray-600">{t.payment.Plan}</span>
             <span className="font-medium">
-              {packageName}{" "}
-              {billingPeriod === "yearly"
-                ? `${t.payment.yearly}`
-                : `${t.payment.monthly}`}
+              {packageName}{' '}
+              {billingPeriod === 'yearly' ? `${t.payment.yearly}` : `${t.payment.monthly}`}
             </span>
           </div>
           <div className="flex justify-between text-sm">
@@ -350,9 +322,7 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
             <span className="text-gray-600">{t.payment.Then}</span>
             <span className="font-medium">
               {currency} {displayAmount.toFixed(2)}/
-              {billingPeriod === "yearly"
-                ? `${t.payment.perYear}`
-                : `${t.payment.perMonth}`}
+              {billingPeriod === 'yearly' ? `${t.payment.perYear}` : `${t.payment.perMonth}`}
             </span>
           </div>
         </div>
@@ -381,8 +351,8 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
                 setError(null);
               }}
               onValidInput={(v: any) => {
-                console.log("Tap onValidInput:", v);
-                if (typeof v === "boolean") {
+                console.log('Tap onValidInput:', v);
+                if (typeof v === 'boolean') {
                   setIsCardValid(v);
                   return;
                 }
@@ -391,7 +361,7 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
                 setIsCardValid(Boolean(isValid));
               }}
               onInvalidInput={(error: any) => {
-                console.log("Tap onInvalidInput fired", error);
+                console.log('Tap onInvalidInput fired', error);
                 // Only set invalid if there is an actual error object/true
                 // If error is false, it means the invalid state is cleared
                 if (error) {
@@ -400,8 +370,8 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
               }}
               onError={(data: any) => {
                 setIsTokenizing(false);
-                console.error("Tap card SDK error:", data);
-                setError("Card form error. Please check your card details.");
+                console.error('Tap card SDK error:', data);
+                setError('Card form error. Please check your card details.');
               }}
               onSuccess={(data: any) => {
                 setIsTokenizing(false);
@@ -413,14 +383,11 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
                   data?.data?.id ||
                   data?.data?.token?.id;
 
-                if (
-                  typeof extractedTokenId === "string" &&
-                  extractedTokenId.startsWith("tok_")
-                ) {
+                if (typeof extractedTokenId === 'string' && extractedTokenId.startsWith('tok_')) {
                   setTokenId(extractedTokenId);
                 } else {
-                  setError("Failed to get card token. Please try again.");
-                  toast.error("Failed to process card. Please try again.");
+                  setError('Failed to get card token. Please try again.');
+                  toast.error('Failed to process card. Please try again.');
                 }
               }}
             />
@@ -433,23 +400,15 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
               disabled={!canSubmit}
               onClick={handleSubmit}
             >
-              {isProcessing && (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              )}
-              {isProcessing
-                ? "Processing..."
-                : `Start ${trialDays}-Day Free Trial`}
+              {isProcessing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {isProcessing ? 'Processing...' : `Start ${trialDays}-Day Free Trial`}
             </Button>
 
             {/* Processing Indicator */}
             {isProcessing && (
               <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
                 <Loader2 className="w-4 h-4 animate-spin" />
-                <span>
-                  {isTokenizing
-                    ? "Securing your card..."
-                    : "Setting up your trial..."}
-                </span>
+                <span>{isTokenizing ? 'Securing your card...' : 'Setting up your trial...'}</span>
               </div>
             )}
 
@@ -468,15 +427,19 @@ export const PaymentForm: React.FC<PaymentFormProps> = ({
 
             {/* Terms */}
             <p className="text-xs text-center text-gray-500">
-              {language =="ar"?"ببدء الفترة التجريبية، فإنك توافق على":"By starting your trial, you agree to our"}{" "}
+              {language == 'ar'
+                ? 'ببدء الفترة التجريبية، فإنك توافق على'
+                : 'By starting your trial, you agree to our'}{' '}
               <a href="/Terms_Conditions" className="underline hover:text-gray-700">
-                {language =="ar"?"شروط الخدمة":"Terms of Service"}
-              </a>{" "}
-              {language =="ar"?"و":"and"} {" "}
+                {language == 'ar' ? 'شروط الخدمة' : 'Terms of Service'}
+              </a>{' '}
+              {language == 'ar' ? 'و' : 'and'}{' '}
               <a href="/privacy-policy" className="underline hover:text-gray-700">
-                {language =="ar"?"سياسة الخصوصية":" Privacy Policy"}  
+                {language == 'ar' ? 'سياسة الخصوصية' : ' Privacy Policy'}
               </a>
-                {language =="ar"?"يمكنك الإلغاء في أي وقت قبل انتهاء الفترة التجريبية.":"You can cancel anytime before the trial ends."} 
+              {language == 'ar'
+                ? 'يمكنك الإلغاء في أي وقت قبل انتهاء الفترة التجريبية.'
+                : 'You can cancel anytime before the trial ends.'}
             </p>
           </div>
         )}

@@ -1,8 +1,9 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { AnalyticsProvider } from '@/components/AnalyticsProvider';
 import { useAppDispatch, useAppSelector } from '@/hooks/hook';
 import { closePremiumModal } from '@/redux/Features/Global/globalSlice';
 import { PremiumAddModal } from '@/components/Shared/PremiumAddModal';
+import { useEffect } from 'react';
 
 /**
  * Root layout that wraps all routes with analytics tracking
@@ -12,6 +13,11 @@ export const AnalyticsLayout = () => {
   const dispatch = useAppDispatch();
   const isPremiumModalOpen = useAppSelector((state) => state.global.isPremiumModalOpen);
   const { user } = useAppSelector((state) => state.auth);
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   const handleOpenChange = (open: boolean) => {
     if (!open) {

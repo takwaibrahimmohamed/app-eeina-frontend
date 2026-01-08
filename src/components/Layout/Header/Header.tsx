@@ -97,12 +97,21 @@ export const Header: React.FC = (): JSX.Element => {
   const navItems: NavItem[] = [
     { name: t.nav.home, path: "/" },
     { name: t.nav.recipes, path: "/recipes" },
-    { name: t.nav.planner, path: "/planner" },
-    { name: t.nav.goals, path: "/goals-dashboard" },
-    { name: t.nav.Packages, path: "/packages" },
     {
       name: t.nav.Blog,
       path: `https://eeina.com/${language == "ar" ? "ar" : "en"}/blog`,
+    },
+    {
+      name: `${language == "ar" ? "البرامج" : "Programs"}`,
+      path: `https://eeina.com/${
+        language == "ar" ? "ar" : "en"
+      }/nutrition-program`,
+    },
+    { name: t.nav.planner, path: "/planner" },
+    { name: t.nav.Packages, path: "/packages" },
+    {
+      name: `${language == "ar" ? "من نحن " : "About Us"}`,
+      path: `https://eeina.com/${language == "ar" ? "ar" : "en"}/about`,
     },
   ];
   const handleLogout = async (): Promise<void> => {
@@ -167,7 +176,7 @@ export const Header: React.FC = (): JSX.Element => {
           </nav>
 
           {/* Right Controls */}
-          <div className={`flex items-center  gap-4 lg:gap-5 xl:gap-7`}>
+          <div className={`flex items-center  gap-4 lg:gap-5 `}>
             {/* Cart */}
             <Link to={getLocalizedPath("/lists")}>
               <Cart width="20" height="20" />

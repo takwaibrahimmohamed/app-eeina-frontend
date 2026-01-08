@@ -11,7 +11,8 @@ export const packageTrans: PackageTranslations = {
   UpgradePlan: "Upgrade Plan",
   startFreeTrial: "Start Free Trial",
   freeTrialBadge: "7-Day Free Trial",
-
+  Freedusc: "Log in and access the platform 100 calorie-counted recipes 5 free ready-made meal plans",
+  SmartLifedusc: "Advanced features for growing businesses to boost efficiency.",
   // SecurePayments
   EncryptedTransactions: "Encrypted Transactions",
   EncryptedTransactionsinfo:

@@ -122,7 +122,7 @@ const PlanCard = ({
             </div>
 
             <p className="text-base font-normal text-[#606060] border-b pb-5 border-b-[#F5F5F5]">
-              {pkg.features[0][language]}
+             {isFreePkg?t.Package.Freedusc:t.Package.SmartLifedusc}
             </p>
 
             {showButton && (

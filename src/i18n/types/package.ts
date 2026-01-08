@@ -9,6 +9,8 @@ export interface PackageTranslations {
   UpgradePlan: string;
   startFreeTrial: string;
   freeTrialBadge: string;
+  Freedusc: string;
+  SmartLifedusc: string;
 
   // SecurePayments
   EncryptedTransactions: string;

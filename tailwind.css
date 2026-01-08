@@ -159,92 +159,73 @@
     @apply bg-background text-foreground;
     background-color: #fafafa;
     font-feature-settings: "rlig" 1, "calt" 1;
-    font-family: 'Poppins-Regular', sans-serif;
   }
+}
 
-  [dir='rtl'] body {
-    font-family: 'DIN_Next_LT_Arabic-Regular', sans-serif;
-  }
+/* Font Variables */
+:root {
+  --font-en: 'Poppins', sans-serif;
+  --font-ar: 'DINNextArabic', sans-serif;
+}
 
-  /* English fonts */
-  @font-face {
-    font-family: 'Poppins-Regular';
-    src: url('/fonts/Poppins-Regular.ttf') format('truetype');
-    font-weight: 400;
-    font-style: normal;
-  }
+/* Apply fonts based on direction */
+html[dir="ltr"] body {
+  font-family: var(--font-en);
+}
 
-  @font-face {
-    font-family: 'Poppins-Medium';
-    src: url('/fonts/Poppins-Medium.ttf') format('truetype');
-    font-weight: 500;
-    font-style: normal;
-  }
+html[dir="rtl"] body {
+  font-family: var(--font-ar);
+}
 
-  @font-face {
-    font-family: 'Poppins-Bold';
-    src: url('/fonts/Poppins-Bold.ttf') format('truetype');
-    font-weight: 700;
-    font-style: normal;
-  }
+/* English Fonts (Poppins) */
+@font-face {
+  font-family: 'Poppins';
+  src: url('/fonts/Poppins-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
 
-  @font-face {
-    font-family: 'Poppins-SemiBold';
-    src: url('/fonts/Poppins-SemiBold.ttf') format('truetype');
-    font-weight: 600;
-    font-style: normal;
-  }
+@font-face {
+  font-family: 'Poppins';
+  src: url('/fonts/Poppins-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
 
-  /* Arabic fonts */
-  @font-face {
-    font-family: 'DIN_Next_LT_Arabic-Regular';
-    src: url('/fonts/ArbFONTS-DINNextLTArabic-Regular-2.ttf') format('truetype');
-    font-weight: 400;
-    font-style: normal;
-  }
+@font-face {
+  font-family: 'Poppins';
+  src: url('/fonts/Poppins-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
 
-  @font-face {
-    font-family: 'DIN_Next_LT_Arabic-Medium';
-    src: url('/fonts/ArbFONTS-DINNextLTArabic-Medium-2.ttf') format('truetype');
-    font-weight: 500;
-    font-style: normal;
-  }
+@font-face {
+  font-family: 'Poppins';
+  src: url('/fonts/Poppins-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
 
-  @font-face {
-    font-family: 'DIN_Next_LT_Arabic-Bold';
-    src: url('/fonts/Poppins-Bold.ttf') format('truetype');
-    font-weight: 700;
-    font-style: normal;
-  }
+/* Arabic Fonts (DINNextArabic) */
+@font-face {
+  font-family: 'DINNextArabic';
+  src: url('/fonts/ArbFONTS-DINNextLTArabic-Regular-2.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
 
-  /* Font weight utilities with RTL support */
-  .font-bold {
-    font-weight: 700;
-  }
+@font-face {
+  font-family: 'DINNextArabic';
+  src: url('/fonts/ArbFONTS-DINNextLTArabic-Medium-2.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
 
-  [dir='rtl'] .font-bold {
-    font-family: 'DIN_Next_LT_Arabic-Bold', sans-serif;
-  }
-
-  .font-semibold {
-    font-weight: 600;
-  }
-
-  .font-medium {
-    font-weight: 500;
-  }
-
-  [dir='rtl'] .font-medium {
-    font-family: 'DIN_Next_LT_Arabic-Medium', sans-serif;
-  }
-
-  .font-normal {
-    font-weight: 400;
-  }
-
-  [dir='rtl'] .font-normal {
-    font-family: 'DIN_Next_LT_Arabic-Regular', sans-serif;
-  }
+@font-face {
+  font-family: 'DINNextArabic';
+  src: url('/fonts/ArbFONTS-DINNextLTArabic-Bold-2.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
 }
 
 @keyframes spin {

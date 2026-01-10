@@ -74,7 +74,8 @@ export const ListDetails = (): JSX.Element => {
   const [addCustomItem] = useAddCustomItemMutation();
   const [clearPurchasedItems] = useClearPurchasedItemsMutation();
   const [importList] = useAddItemMutation();
-  const [addItemToSpecificList, { isLoading: isAddingIngredient }] = useAddItemtoSpecificListMutation();
+  const [addItemToSpecificList, { isLoading: isAddingIngredient }] =
+    useAddItemtoSpecificListMutation();
 
   const listData = data?.data || {};
   const userListsItems = listData.items || [];
@@ -100,7 +101,7 @@ export const ListDetails = (): JSX.Element => {
     if (!pdfRef.current) return;
     setIsPdf(true);
     const header = document.createElement('h3');
-    header.textContent = t.shopping_list.your_items;
+    header.textContent = t?.shopping_list?.your_items || 'Your Items';
     header.className = 'text-lg sm:text-xl font-bold text-gray-900 mb-4';
     pdfRef.current.insertBefore(header, pdfRef.current.firstChild);
 
@@ -139,29 +140,32 @@ export const ListDetails = (): JSX.Element => {
 
   const removeItem = async (id: string) => {
     if (!id) return;
-    if (!window.confirm(t.shopping_list.confirm_delete_item)) return;
+    if (!window.confirm(t?.shopping_list?.confirm_delete_item || 'Delete this item?')) return;
 
     try {
       await deleteItem({ listId, itemId: id, token: token || undefined }).unwrap();
-      toast.success(t.shopping_list.item_deleted_success);
+      toast.success(t?.shopping_list?.item_deleted_success || 'Item deleted successfully');
     } catch (error: any) {
-      toast.error(error?.data?.message || t.shopping_list.delete_item_failed);
+      toast.error(
+        error?.data?.message || t?.shopping_list?.delete_item_failed || 'Failed to delete item',
+      );
     }
   };
 
   const addNewItem = async () => {
     if (!newItemText.trim()) {
-      toast.error(t.shopping_list.enter_item_text);
+      toast.error(t?.shopping_list?.enter_item_text || 'Please enter item text');
       return;
     }
     // Simple duplicate check for custom items
     const customExists = userListsCustomItems.some(
-      (i: any) => i.name?.en?.toLowerCase() === newItemText.toLowerCase() ||
-        i.name?.ar?.toLowerCase() === newItemText.toLowerCase()
+      (i: any) =>
+        i.name?.en?.toLowerCase() === newItemText?.toLowerCase() ||
+        i.name?.ar?.toLowerCase() === newItemText?.toLowerCase(),
     );
 
     if (customExists) {
-      toast.info(t.shopping_list?.item_already_exists || "Item might already exist in your list");
+      toast.info(t?.shopping_list?.item_already_exists || 'Item might already exist in your list');
     }
 
     try {
@@ -174,7 +178,7 @@ export const ListDetails = (): JSX.Element => {
       toast.success(res.message);
       setNewItemText('');
     } catch (error: any) {
-      toast.error(error?.data?.message || t.shopping_list.add_item_failed);
+      toast.error(error?.data?.message || t?.shopping_list?.add_item_failed);
     }
   };
 
@@ -191,14 +195,19 @@ export const ListDetails = (): JSX.Element => {
         items: [payload],
       }).unwrap();
 
-      toast.success(swapItem ? (t.shopping_list?.item_swapped_success || "Item swapped successfully") : (t.shopping_list?.item_added_success || "Item added successfully"));
+      toast.success(
+        swapItem
+          ? t?.shopping_list?.item_swapped_success || 'Item swapped successfully'
+          : t?.shopping_list?.item_added_success || 'Item added successfully',
+      );
 
       // Close modal and reset swap item
       setIsIngredientModalOpen(false);
       setSwapItem(null);
-
     } catch (error: any) {
-      toast.error(error?.data?.message || t.shopping_list?.add_item_failed || "Failed to add item");
+      toast.error(
+        error?.data?.message || t?.shopping_list?.add_item_failed || 'Failed to add item',
+      );
     }
   };
 
@@ -210,27 +219,28 @@ export const ListDetails = (): JSX.Element => {
   const handleSuggestedAdd = (suggestion: string) => {
     setNewItemText(suggestion);
     // Optionally auto-add:
-    // addNewItem(); 
+    // addNewItem();
     // But strictly modifying state to let user confirm is safer, or we can just call the api directly:
     const body = {
       name: { en: suggestion, ar: suggestion },
       listId,
       token: token || undefined,
     };
-    addCustomItem(body).unwrap()
+    addCustomItem(body)
+      .unwrap()
       .then((res) => toast.success(res.message))
-      .catch((err) => toast.error(err?.data?.message || "Failed"));
+      .catch((err) => toast.error(err?.data?.message || 'Failed'));
   };
 
   const handleClearPurchasedItems = async () => {
     if (purchasedItems.length === 0) {
-      toast.info(t.shopping_list.no_purchased_to_clear);
+      toast.info(t?.shopping_list?.no_purchased_to_clear || 'No purchased items to clear');
       return;
     }
 
     if (
       !window.confirm(
-        t.shopping_list.confirm_clear_purchased.replace(
+        (t?.shopping_list?.confirm_clear_purchased || 'Clear {count} items?').replace(
           '{count}',
           purchasedItems.length.toString(),
         ),
@@ -240,43 +250,51 @@ export const ListDetails = (): JSX.Element => {
 
     try {
       await clearPurchasedItems({ listId, token: token || undefined }).unwrap();
-      toast.success(t.shopping_list.purchased_cleared_success);
+      toast.success(t?.shopping_list?.purchased_cleared_success || 'Cleared purchased items');
     } catch (error: any) {
-      toast.error(error?.data?.message || t.shopping_list.clear_purchased_failed);
+      toast.error(
+        error?.data?.message || t?.shopping_list?.clear_purchased_failed || 'Failed to clear items',
+      );
     }
   };
 
   const handleClearAll = async () => {
     const allItems = [...userListsItems, ...userListsCustomItems];
     if (allItems.length === 0) {
-      toast.info(t.shopping_list.no_items_found);
+      toast.info(t?.shopping_list?.no_items_found || 'No items found');
       return;
     }
 
-    if (!window.confirm(t.shopping_list.confirm_clear_all)) return;
+    if (
+      !window.confirm(
+        t?.shopping_list?.confirm_clear_all || 'Area you sure you want to clear all items?',
+      )
+    )
+      return;
 
     try {
       // Since there is no bulk delete API, we delete items one by one
       // We can use Promise.all to do it in parallel
       const promises = allItems.map((item: any) =>
-        deleteItem({ listId, itemId: item._id, token: token || undefined }).unwrap()
+        deleteItem({ listId, itemId: item._id, token: token || undefined }).unwrap(),
       );
 
       await Promise.all(promises);
-      toast.success(t.shopping_list.all_items_cleared_success);
+      toast.success(t?.shopping_list?.all_items_cleared_success || 'All items cleared');
     } catch (error: any) {
-      toast.error(error?.data?.message || t.shopping_list.clear_all_failed);
+      toast.error(
+        error?.data?.message || t?.shopping_list?.clear_all_failed || 'Failed to clear all',
+      );
     }
   };
   const getItemCategory = (item: any, language: string) => {
     // Try to get category from item
-    let category = item.item?.category?.[language] ||
-      item.item?.category?.en ||
-      item.item?.category?.ar;
+    let category =
+      item.item?.category?.[language] || item.item?.category?.en || item.item?.category?.ar;
 
     // If no category and it's a custom item, try to guess from name
     if (!category || category === 'Uncategorized') {
-      const name = (item.name?.en || item.item?.name?.en || '').toLowerCase();
+      const name = String(item.name?.en || item.item?.name?.en || '').toLowerCase();
       for (const key in CATEGORY_KEYWORDS) {
         if (name.includes(key)) {
           category = CATEGORY_KEYWORDS[key];
@@ -285,7 +303,7 @@ export const ListDetails = (): JSX.Element => {
       }
     }
 
-    return category || t.shopping_list.uncategorized;
+    return category || t?.shopping_list?.uncategorized || 'Uncategorized';
   };
   const getCategoryStats = () => {
     const allItems = [...userListsItems, ...userListsCustomItems];
@@ -300,8 +318,6 @@ export const ListDetails = (): JSX.Element => {
   };
 
   const categoryStats = getCategoryStats();
-
-
 
   function formatItemsForImport(data: RawListItem[]) {
     const items: FormattedListItem[] = data.map((entry) => ({
@@ -322,7 +338,7 @@ export const ListDetails = (): JSX.Element => {
     console.log(payload);
     try {
       await importList(payload).unwrap();
-      toast.success(t.shopping_list.list_imported_success);
+      toast.success(t?.shopping_list?.list_imported_success || 'List imported');
       navigate(getLocalizedPath('/lists', language));
     } catch (error) {
       // if 401 unauthorized, navigate to login
@@ -347,7 +363,7 @@ export const ListDetails = (): JSX.Element => {
         setIsChooseStoreModalOpen(true);
       }
     } else {
-      toast.error(t.shopping_list.no_items_in_list);
+      toast.error(t?.shopping_list?.no_items_in_list || 'No items in list');
     }
   };
 
@@ -371,7 +387,7 @@ export const ListDetails = (): JSX.Element => {
       setIsLocationModalOpen(false);
       setIsChooseStoreModalOpen(true);
     } catch (error: any) {
-      toast.error(error?.data?.message || t.common.error_occurred);
+      toast.error(error?.data?.message || t?.common?.error_occurred || 'An error occurred');
       console.log('err', error);
     }
     // then navigate to checkout page
@@ -390,12 +406,13 @@ export const ListDetails = (): JSX.Element => {
 
       const nameObj = item.item?.name || item.name;
       // Fallback to slug or ID if name is missing, but prioritize name for visual merging
-      const rawName = nameObj?.[language] || nameObj?.en || nameObj?.ar || item.item?.slug?.en || 'unknown_item';
-      const normalizedName = rawName.toLowerCase().trim();
+      const rawName =
+        nameObj?.[language] || nameObj?.en || nameObj?.ar || item.item?.slug?.en || 'unknown_item';
+      const normalizedName = String(rawName).toLowerCase().trim();
 
       const unitObj = item.unit;
       const rawUnit = unitObj?.[language] || unitObj?.en || unitObj?.ar || 'unit';
-      const normalizedUnit = rawUnit.toLowerCase().trim();
+      const normalizedUnit = String(rawUnit).toLowerCase().trim();
 
       const key = `${normalizedName}-${normalizedUnit}`;
 
@@ -418,10 +435,10 @@ export const ListDetails = (): JSX.Element => {
     });
 
     // Sort alphabetically within categories
-    Object.keys(grouped).forEach(category => {
+    Object.keys(grouped).forEach((category) => {
       grouped[category].sort((a, b) => {
-        const nameA = (a.item?.name?.[language] || a.name?.[language] || '').toLowerCase();
-        const nameB = (b.item?.name?.[language] || b.name?.[language] || '').toLowerCase();
+        const nameA = String(a.item?.name?.[language] || a.name?.[language] || '').toLowerCase();
+        const nameB = String(b.item?.name?.[language] || b.name?.[language] || '').toLowerCase();
         return nameA.localeCompare(nameB);
       });
     });
@@ -460,9 +477,9 @@ export const ListDetails = (): JSX.Element => {
         isCustom={!userListsItems.some((ri: any) => ri._id === item._id)}
         isPdf={isPdf}
         unitSystem={unitSystem}
-      // displayName={getItemDisplayName(item)}
-      // quantityDisplay={getQuantityDisplay(item)}
-      // recipeName={item.recipe?._id ? (item.recipe?.title?.[language] || item.recipe?.title?.en) : undefined}
+        // displayName={getItemDisplayName(item)}
+        // quantityDisplay={getQuantityDisplay(item)}
+        // recipeName={item.recipe?._id ? (item.recipe?.title?.[language] || item.recipe?.title?.en) : undefined}
       />
     ));
 
@@ -482,25 +499,33 @@ export const ListDetails = (): JSX.Element => {
                     <ShoppingCart className="w-6 h-6 text-white" />
                   </div>
                   <h1 className="text-2xl sm:text-3xl font-bold text-white">
-                    {listData.name || t.shopping_list.title}
+                    {listData.name || t?.shopping_list?.title || 'Shopping List'}
                   </h1>
                 </div>
                 <p className="text-gray-300 max-w-md">
-                  {t.shopping_list.ingredients_in_list}
+                  {t?.shopping_list?.ingredients_in_list || 'Ingredients in your shopping list'}
                 </p>
 
                 <div className="flex gap-6 mt-6">
                   <div>
-                    <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">{t.shopping_list.total_items}</p>
+                    <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">
+                      {t?.shopping_list?.total_items || 'Total Items'}
+                    </p>
                     <p className="text-2xl font-bold">{totalCount}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">{t.shopping_list.completed}</p>
+                    <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">
+                      {t?.shopping_list?.completed || 'Completed'}
+                    </p>
                     <p className="text-2xl font-bold text-green-400">{purchasedCount}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">{t.shopping_list.remaining}</p>
-                    <p className="text-2xl font-bold text-orange-400">{totalCount - purchasedCount}</p>
+                    <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">
+                      {t?.shopping_list?.remaining || 'Remaining'}
+                    </p>
+                    <p className="text-2xl font-bold text-orange-400">
+                      {totalCount - purchasedCount}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -508,8 +533,12 @@ export const ListDetails = (): JSX.Element => {
               {/* Circular Progress */}
               <div className="flex items-center gap-4 bg-white/10 p-4 rounded-xl backdrop-blur-sm">
                 <div className="text-right mr-2 hidden sm:block">
-                  <p className="text-sm text-gray-300">{t.shopping_list.shopping_progress}</p>
-                  <p className="text-xs text-gray-400">{purchasedCount} {t.shopping_list.of} {totalCount} items</p>
+                  <p className="text-sm text-gray-300">
+                    {t?.shopping_list?.shopping_progress || 'Your Progress'}
+                  </p>
+                  <p className="text-xs text-gray-400">
+                    {purchasedCount} {t?.shopping_list?.of || 'of'} {totalCount} items
+                  </p>
                 </div>
                 <CircularProgress
                   value={completionPercentage}
@@ -533,7 +562,9 @@ export const ListDetails = (): JSX.Element => {
               className="flex-initial justify-start h-12 text-gray-700 hover:text-primaryColor hover:bg-green-50 px-4 border-r-0 sm:border-r border-gray-100 rounded-none sm:rounded-l-lg"
             >
               <CalendarDays className="w-5 h-5 mr-3" />
-              <span className="text-base font-medium">{language === 'ar' ? 'استيراد وجبات' : 'Import Meals'}</span>
+              <span className="text-base font-medium">
+                {language === 'ar' ? 'استيراد وجبات' : 'Import Meals'}
+              </span>
             </Button>
 
             <Button
@@ -545,12 +576,14 @@ export const ListDetails = (): JSX.Element => {
               className="flex-1 justify-start h-12 text-gray-500 hover:text-primaryColor hover:bg-green-50"
             >
               <Search className="w-5 h-5 mr-3" />
-              <span className="text-base font-normal">{t.shopping_list?.search_ingredients || "Search Database..."}</span>
+              <span className="text-base font-normal">
+                {t?.shopping_list?.search_ingredients || 'Search Database...'}
+              </span>
             </Button>
             <div className="w-px bg-gray-200 my-2 hidden sm:block"></div>
             <div className="flex-1 flex items-center px-2">
               <Input
-                placeholder={t.shopping_list.add_custom_item_placeholder}
+                placeholder={t?.shopping_list?.add_custom_item_placeholder || 'Add custom item...'}
                 className="border-0 shadow-none focus-visible:ring-0 text-base h-10 bg-transparent flex-1"
                 value={newItemText}
                 onChange={(e) => setNewItemText(e.target.value)}
@@ -587,39 +620,47 @@ export const ListDetails = (): JSX.Element => {
             <Card>
               <CardContent className="p-4 sm:p-6">
                 <div
-                  className={`flex flex-col sm:flex-row ${isRTL ? 'items-start' : 'items-start'}  sm:items-center justify-between mb-6`}
+                  className={`flex flex-col sm:flex-row ${
+                    isRTL ? 'items-start' : 'items-start'
+                  }  sm:items-center justify-between mb-6`}
                 >
                   {/* Smart Tabs */}
                   <div className="flex items-center p-1 bg-gray-100 rounded-lg mb-4 sm:mb-0">
                     <button
                       onClick={() => setActiveTab('pending')}
-                      className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${activeTab === 'pending'
-                        ? 'bg-white text-gray-900 shadow-sm'
-                        : 'text-gray-500 hover:text-gray-900'
-                        }`}
+                      className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${
+                        activeTab === 'pending'
+                          ? 'bg-white text-gray-900 shadow-sm'
+                          : 'text-gray-500 hover:text-gray-900'
+                      }`}
                     >
-                      {t.shopping_list.pending_items} ({pendingItems.length})
+                      {t?.shopping_list?.pending_items || 'Pending'} ({pendingItems.length})
                     </button>
                     <button
                       onClick={() => setActiveTab('purchased')}
-                      className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${activeTab === 'purchased'
-                        ? 'bg-white text-gray-900 shadow-sm'
-                        : 'text-gray-500 hover:text-gray-900'
-                        }`}
+                      className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${
+                        activeTab === 'purchased'
+                          ? 'bg-white text-gray-900 shadow-sm'
+                          : 'text-gray-500 hover:text-gray-900'
+                      }`}
                     >
-                      {t.shopping_list.purchased_items} ({purchasedItems.length})
+                      {t?.shopping_list?.purchased_items || 'Purchased'} ({purchasedItems.length})
                     </button>
                   </div>
 
                   <div className="flex items-center gap-2">
                     <Button variant="secondary" onClick={handleCheckout}>
-                      <span className="hidden sm:inline-block">{t.shopping_list.checkout}</span>
+                      <span className="hidden sm:inline-block">
+                        {t?.shopping_list?.checkout || 'Checkout'}
+                      </span>
                       <ShoppingCartIcon className="w-4 h-4 sm:ml-2" />
                     </Button>
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => setUnitSystem((prev) => (prev === 'metric' ? 'imperial' : 'metric'))}
+                      onClick={() =>
+                        setUnitSystem((prev) => (prev === 'metric' ? 'imperial' : 'metric'))
+                      }
                       className="min-w-[80px]"
                     >
                       <ArrowRightLeft className="w-4 h-4 mr-2" />
@@ -643,7 +684,7 @@ export const ListDetails = (): JSX.Element => {
                         className="bg-red-500 text-white"
                       >
                         <Trash2 className="w-4 h-4 mr-2" />
-                        {t.shopping_list.clear_purchased}
+                        {t?.shopping_list?.clear_purchased || 'Clear Purchased'}
                       </Button>
                     )}
                     {activeTab === 'pending' && pendingItems.length > 0 && (
@@ -656,7 +697,6 @@ export const ListDetails = (): JSX.Element => {
                         <Trash2 className="w-4 h-4" />
                       </Button>
                     )}
-
                   </div>
                 </div>
 
@@ -670,26 +710,28 @@ export const ListDetails = (): JSX.Element => {
                           </div>
 
                           {groupBy === 'aisle' ? (
-                            Object.entries(groupItemsByCategory(pendingItems)).map(([category, items]) => (
-                              <div key={category} className="mb-6">
-                                <div className="flex items-center gap-2 mb-3">
-                                  <div className="h-6 w-1 bg-primaryColor rounded-full"></div>
-                                  <h5 className="text-sm font-bold text-gray-800 uppercase tracking-wide">
-                                    {category}
-                                  </h5>
-                                  <span className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">
-                                    {items.length}
-                                  </span>
+                            Object.entries(groupItemsByCategory(pendingItems)).map(
+                              ([category, items]) => (
+                                <div key={category} className="mb-6">
+                                  <div className="flex items-center gap-2 mb-3">
+                                    <div className="h-6 w-1 bg-primaryColor rounded-full"></div>
+                                    <h5 className="text-sm font-bold text-gray-800 uppercase tracking-wide">
+                                      {category}
+                                    </h5>
+                                    <span className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">
+                                      {items.length}
+                                    </span>
+                                  </div>
+                                  {renderShoppingItems(items)}
                                 </div>
-                                {renderShoppingItems(items)}
-                              </div>
-                            ))
+                              ),
+                            )
                           ) : (
                             <>
                               {Object.entries(grouped).map(([recipeId, items]) => (
                                 <div key={recipeId} className="mb-6">
                                   <h5 className="text-md font-bold text-gray-800 border-b border-gray-100 pb-2 mb-3">
-                                    {recipeNames[recipeId] || t.shopping_list.other}
+                                    {recipeNames[recipeId] || t?.shopping_list?.other || 'Other'}
                                   </h5>
                                   {renderShoppingItems(items)}
                                 </div>
@@ -697,7 +739,7 @@ export const ListDetails = (): JSX.Element => {
                               {CustomItems.length > 0 && (
                                 <div className="mb-6">
                                   <h5 className="text-md font-bold text-gray-800 border-b border-gray-100 pb-2 mb-3">
-                                    {t.shopping_list.other}
+                                    {t?.shopping_list?.other || 'Other'}
                                   </h5>
                                   {renderShoppingItems(CustomItems)}
                                 </div>
@@ -711,10 +753,11 @@ export const ListDetails = (): JSX.Element => {
                             <ShoppingCart className="w-8 h-8 text-gray-300" />
                           </div>
                           <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                            {t.shopping_list.no_items_found}
+                            {t?.shopping_list?.no_items_found || 'No items found'}
                           </h3>
                           <p className="text-gray-500 max-w-xs mx-auto text-sm leading-relaxed">
-                            {t.shopping_list.add_ingredients_msg}
+                            {t?.shopping_list?.add_ingredients_msg ||
+                              'Add some ingredients to get started'}
                           </p>
                           <Button
                             variant="link"
@@ -734,7 +777,7 @@ export const ListDetails = (): JSX.Element => {
                         renderShoppingItems(purchasedItems)
                       ) : (
                         <div className="text-center py-12 text-gray-400">
-                          <p>{t.shopping_list.no_purchased_to_clear}</p>
+                          <p>{t?.shopping_list?.no_purchased_to_clear || 'No purchased items'}</p>
                         </div>
                       )}
                     </div>
@@ -752,7 +795,7 @@ export const ListDetails = (): JSX.Element => {
               <Card>
                 <CardContent className="p-4 sm:p-6">
                   <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-4">
-                    {t.shopping_list.categories}
+                    {t?.shopping_list?.categories || 'Categories'}
                   </h3>
                   <div className="space-y-3">
                     {Object.entries(categoryStats).map(([category, stats]) => (
@@ -766,7 +809,9 @@ export const ListDetails = (): JSX.Element => {
                             <div
                               className="h-2 bg-primaryColor rounded-full transition-all"
                               style={{
-                                width: `${stats.total > 0 ? (stats.completed / stats.total) * 100 : 0}%`,
+                                width: `${
+                                  stats.total > 0 ? (stats.completed / stats.total) * 100 : 0
+                                }%`,
                               }}
                             />
                           </div>
@@ -777,7 +822,7 @@ export const ListDetails = (): JSX.Element => {
                     {/* Empty state for categories */}
                     {Object.keys(categoryStats).length === 0 && (
                       <p className="text-sm text-gray-500 text-center py-2">
-                        {t.shopping_list.no_categories}
+                        {t?.shopping_list?.no_categories || 'No categories'}
                       </p>
                     )}
                   </div>
@@ -786,10 +831,10 @@ export const ListDetails = (): JSX.Element => {
             </div>
           </div>
         </div>
-      </div >
+      </div>
 
       {/* Share Modal */}
-      < ShareListModal
+      <ShareListModal
         listId={listId!}
         isOpen={isShareModalOpen}
         onClose={() => setIsShareModalOpen(false)}
@@ -816,9 +861,17 @@ export const ListDetails = (): JSX.Element => {
         }}
         onAdd={handleAddIngredient}
         isLoading={isAddingIngredient}
-        title={swapItem ? (t.shopping_list?.swap_item || "Swap Item") : undefined}
-        confirmLabel={swapItem ? (t.shopping_list?.swap || "Swap") : undefined}
-        initialQuery={swapItem ? (swapItem.name?.[language] || swapItem.name?.en || swapItem.item?.name?.[language] || swapItem.item?.name?.en || '') : ''}
+        title={swapItem ? t?.shopping_list?.swap_item || 'Swap Item' : undefined}
+        confirmLabel={swapItem ? t?.shopping_list?.swap || 'Swap' : undefined}
+        initialQuery={
+          swapItem
+            ? swapItem.name?.[language] ||
+              swapItem.name?.en ||
+              swapItem.item?.name?.[language] ||
+              swapItem.item?.name?.en ||
+              ''
+            : ''
+        }
       />
 
       <ImportFromMealPlanModal

@@ -48,7 +48,6 @@ interface GetSubscriptionsParams {
 type GetSubscriptionResponse = SubscriptionData;
 
 interface StartTrialParams {
-  tokenId: string;
   packageId: string;
   billingPeriod?: 'monthly' | 'yearly';
 }
@@ -100,7 +99,7 @@ export const subscriptionApi = baseApi.injectEndpoints({
      */
     startTrial: builder.mutation<{ data: StartTrialResponse; message: string }, StartTrialParams>({
       query: (body) => ({
-        url: '/subscriptions/start-trial',
+        url: '/subscriptions/trial',
         method: 'POST',
         body,
         credentials: 'include',

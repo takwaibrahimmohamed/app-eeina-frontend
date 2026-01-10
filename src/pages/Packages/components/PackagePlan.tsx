@@ -12,6 +12,7 @@ interface PackagePlanProps {
   setbillingPeriod: (billingPeriod: 'monthly' | 'yearly') => void;
   onStartTrial: (pkg: Package) => void;
   activePackageId: string | undefined;
+  isTrialStarting: boolean;
 }
 
 const PackagePlan = ({
@@ -20,6 +21,7 @@ const PackagePlan = ({
   setbillingPeriod,
   onStartTrial,
   activePackageId,
+  isTrialStarting,
 }: PackagePlanProps) => {
   const { t } = useLanguage();
 
@@ -73,6 +75,7 @@ const PackagePlan = ({
           packages={packages}
           billingPeriod={billingPeriod}
           onStartTrial={onStartTrial}
+          isTrialStarting={isTrialStarting}
           activePackageId={activePackageId}
         />
 

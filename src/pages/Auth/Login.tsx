@@ -75,15 +75,15 @@ export const Login = (): JSX.Element => {
   };
 
   return (
-    <div className="container min-h-screen ">
-      <div className="flex flex-col lg:flex-row justify-between items-stretch gap-5 lg:gap-7 xl2:gap-16 pt-16">
-        <div className="items-start w-full lg:flex-1 flex flex-col  px-0 lg:px-5 xl2:px-10">
-          <div className="flex w-full flex-col gap-0 lg:gap-8 flex-1 lg:mt-28">
-            <h2 className="leading-8 lg:leading-normal text-start font-semibold text-[20px] lg:text-[24px] xl:text-[36px] xl2:text-[40px]">
+    <div className="container min-h-screen lg:h-screen flex items-center justify-center overflow-y-auto lg:overflow-hidden py-10 lg:py-0">
+      <div className="flex flex-col lg:flex-row justify-between items-stretch gap-5 lg:gap-7 xl2:gap-16 w-full lg:h-[85vh]">
+        <div className="items-start w-full lg:flex-1 flex flex-col px-0 lg:px-5 xl2:px-10">
+          <div className="flex w-full flex-col gap-0 lg:gap-8 flex-1">
+            <h2 className="leading-8 lg:leading-normal text-start font-semibold text-[20px] lg:text-[24px] xl:text-[30px] xl2:text-[34px] mb-2 lg:mb-4">
               {t.auth.loginTitle}
             </h2>
-            <div className=" bg-[#FBFCFC] lg:shadow  rounded-t-[32px] py-5 flex flex-col gap-5  flex-1  lg:px-8 lg:pt-16">
-              <h3 className="text-[25px] lg:text-[36px] font-medium">{t.auth.sign_in}</h3>
+            <div className=" bg-[#FBFCFC] lg:shadow  rounded-t-[32px] py-4 flex flex-col gap-3 flex-1 lg:px-8 lg:pt-8">
+              <h3 className="text-[20px] lg:text-[28px] font-medium">{t.auth.sign_in}</h3>
               <p className="text-[14px] font-medium text-[#3F4247] mb-1">
                 {t.auth.Newuser}
                 <Link to={getLocalizedPath('/signup', language)} className=" hover:!text-[#1c9a40]">
@@ -91,18 +91,18 @@ export const Login = (): JSX.Element => {
                   {t.auth.create_account}
                 </Link>
               </p>
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-7  flex flex-col flex-1">
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 flex flex-col flex-1">
                 {/* Email Input */}
                 <div className="relative w-full ">
                   <input
                     type="email"
                     placeholder={t.auth.placeholder_email}
                     {...register('email')}
-                    className=" block h-12 w-full px-3 pb-2.5 pt-4 text-base text-gray-800 !bg-white rounded-xl border border-gray-300 appearance-none focus:outline-none focus:ring-1 focus:ring-[#DCDBDD] focus:border-[#DCDBDD] peer"
+                    className=" block h-11 w-full px-3 pb-2.5 pt-4 text-base text-gray-800 !bg-white rounded-xl border border-gray-300 appearance-none focus:outline-none focus:ring-1 focus:ring-[#DCDBDD] focus:border-[#DCDBDD] peer"
                   />
                   <label
                     htmlFor="floating_outlined"
-                    className="absolute text-[14px] md:text-[16px] text-[#84818A] duration-300 transform -translate-y-1/2 top-1/2 z-10 origin-[0] bg-[#FBFCFC] px-2 peer-focus:top-2 peer-focus:scale-75 
+                    className="absolute text-[14px] md:text-[15px] text-[#84818A] duration-300 transform -translate-y-1/2 top-1/2 z-10 origin-[0] bg-[#FBFCFC] px-2 peer-focus:top-2 peer-focus:scale-75 
                     peer-focus:-translate-y-4 peer-focus:text-[#84818A] 
                     peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 
                      peer-valid:top-2 peer-valid:scale-75 peer-valid:-translate-y-4
@@ -120,15 +120,14 @@ export const Login = (): JSX.Element => {
                     type={showPassword ? 'text' : 'password'}
                     placeholder={t.auth.placeholder_password}
                     {...register('password')}
-                    className="block h-12 w-full px-3 pb-2.5 pt-4 text-base text-gray-800 bg-white rounded-xl border border-gray-300 appearance-none focus:outline-none focus:ring-1 focus:ring-[#DCDBDD] focus:border-[#DCDBDD] peer"
+                    className="block h-11 w-full px-3 pb-2.5 pt-4 text-base text-gray-800 bg-white rounded-xl border border-gray-300 appearance-none focus:outline-none focus:ring-1 focus:ring-[#DCDBDD] focus:border-[#DCDBDD] peer"
                   />
                   <Button
                     type="button"
                     variant="ghost"
                     size="icon"
-                    className={`absolute top-1/2 transform -translate-y-1/2 hover:bg-transparent ${
-                      isRTL ? 'left-3' : 'right-3'
-                    } text-gray-400 hover:text-gray-600`}
+                    className={`absolute top-1/2 transform -translate-y-1/2 hover:bg-transparent ${isRTL ? 'left-3' : 'right-3'
+                      } text-gray-400 hover:text-gray-600`}
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? (
@@ -139,7 +138,7 @@ export const Login = (): JSX.Element => {
                   </Button>
                   <label
                     htmlFor="floating_outlined"
-                    className="absolute text-[14px] md:text-[16px] text-[#84818A] duration-300 transform -translate-y-1/2 top-1/2 z-10 origin-[0] bg-[#FBFCFC] px-2 peer-focus:top-2 peer-focus:scale-75 
+                    className="absolute text-[14px] md:text-[15px] text-[#84818A] duration-300 transform -translate-y-1/2 top-1/2 z-10 origin-[0] bg-[#FBFCFC] px-2 peer-focus:top-2 peer-focus:scale-75 
                     peer-focus:-translate-y-4 peer-focus:text-[#84818A] 
                     peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 
                      peer-valid:top-2 peer-valid:scale-75 peer-valid:-translate-y-4
@@ -174,7 +173,7 @@ export const Login = (): JSX.Element => {
                 <Button
                   type="submit"
                   disabled={isSubmitting || !isValid}
-                  className="w-full h-12 bg-[#87B740] hover:bg-primaryColor text-white font-semibold text-base rounded-xl"
+                  className="w-full h-11 bg-[#87B740] hover:bg-primaryColor text-white font-semibold text-base rounded-xl"
                 >
                   {isSubmitting ? (
                     <div className="flex items-center gap-2">
@@ -190,7 +189,7 @@ export const Login = (): JSX.Element => {
                 </Button>
 
                 {/* Divider */}
-                <div className="relative py-3">
+                <div className="relative py-2">
                   <Separator />
                   <div className="absolute inset-0 flex items-center justify-center">
                     <span className="bg-[#FBFCFC] px-4 text-sm text-[#84818A] text-[14px] font-normal">
@@ -204,7 +203,7 @@ export const Login = (): JSX.Element => {
                   <Button
                     type="button"
                     variant="outline"
-                    className="flex-1 w-full h-12 rounded-[12px] border-[#DCDBDD] text-[14px] font-medium"
+                    className="flex-1 w-full h-11 rounded-[12px] border-[#DCDBDD] text-[14px] font-medium"
                     onClick={handleGoogleLogin}
                   >
                     <Google />
@@ -213,7 +212,7 @@ export const Login = (): JSX.Element => {
                   <Button
                     type="button"
                     variant="outline"
-                    className="flex-1 w-full h-12 rounded-[12px] border-[#DCDBDD] text-[14px] font-medium"
+                    className="flex-1 w-full h-11 rounded-[12px] border-[#DCDBDD] text-[14px] font-medium"
                     onClick={handleFacebookLogin}
                   >
                     <div className="flex-shrink-0 w-[15px] h-[15px] p-3  bg-[#1977F3] rounded-full  flex items-center justify-center">
@@ -222,15 +221,26 @@ export const Login = (): JSX.Element => {
                     {t.auth.continue_with_facebook}
                   </Button>
                 </div>
+
+                {/* Sign up link (Bottom) */}
+                <div className="flex items-center justify-center gap-1 mt-4">
+                  <span className="text-[14px] text-[#84818A]">{t.auth.Newuser}</span>
+                  <Link
+                    to={getLocalizedPath('/signup', language)}
+                    className="text-[14px] font-semibold text-primaryColor hover:text-[#1c9a40]"
+                  >
+                    {t.auth.create_account}
+                  </Link>
+                </div>
               </form>
             </div>
           </div>
         </div>
-        <div className="flex-1 pb-16   hidden lg:flex ">
+        <div className="flex-1 hidden lg:flex">
           <img
             src="/Calculate my needs.svg"
             alt="goalinfo"
-            className="rounded-[32px] h-full w-full object-cover "
+            className="rounded-[32px] w-full object-cover h-full"
           />
         </div>
       </div>

@@ -135,15 +135,15 @@ export const Signup = (): JSX.Element => {
   };
 
   return (
-    <div className="container min-h-screen ">
-      <div className="flex flex-col lg:flex-row justify-between items-stretch gap-5 lg:gap-7 xl2:gap-16 pt-16">
-        <div className="items-start w-full lg:flex-1 flex flex-col  px-0 lg:px-5 xl2:px-10">
-          <div className="flex w-full flex-col gap-0 lg:gap-8 flex-1 lg:mt-28">
-            <h2 className="leading-8 lg:leading-normal text-start font-semibold text-[18px] sm:text-[20px] lg:text-[24px] xl:text-[36px] xl2:text-[40px]">
+    <div className="container min-h-screen lg:h-screen flex items-center justify-center overflow-y-auto lg:overflow-hidden py-10 lg:py-0">
+      <div className="flex flex-col lg:flex-row justify-between items-stretch gap-5 lg:gap-7 xl2:gap-16 w-full lg:h-[85vh]">
+        <div className="items-start w-full lg:flex-1 flex flex-col px-0 lg:px-5 xl2:px-10">
+          <div className="flex w-full flex-col gap-0 lg:gap-8 flex-1">
+            <h2 className="leading-8 lg:leading-normal text-start font-semibold text-[18px] sm:text-[20px] lg:text-[24px] xl:text-[30px] xl2:text-[34px] mb-2 lg:mb-4">
               {t.auth.registerTitle}
             </h2>
-            <div className=" bg-[#FBFCFC] lg:shadow  rounded-t-[32px] py-5 flex flex-col gap-5  flex-1  lg:px-8 lg:pt-16">
-              <h3 className="text-[25px] lg:text-[36px] font-medium">{t.auth.create_account}</h3>
+            <div className=" bg-[#FBFCFC] lg:shadow  rounded-t-[32px] py-4 flex flex-col gap-3 flex-1 lg:px-6 lg:pt-8">
+              <h3 className="text-[20px] lg:text-[28px] font-medium">{t.auth.create_account}</h3>
               <p className="text-[14px] font-medium text-[#3F4247] mb-1">
                 {t.auth.already_have_account}
                 <Link to={getLocalizedPath('/login', language)} className="hover:!text-[#1c9a40]">
@@ -153,20 +153,20 @@ export const Signup = (): JSX.Element => {
               </p>
               <form
                 onSubmit={handleSubmit(onSubmit)}
-                className="space-y-7  flex flex-col flex-1 lg:pb-5"
+                className="space-y-3 flex flex-col flex-1 lg:pb-2"
               >
-                <div className="grid grid-cols-1 sm:grid-cols-12 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
                   {/* Email Input */}
                   <div className="relative w-full col-span-12 lg:col-span-6">
                     <input
                       type="email"
                       placeholder={t.auth.placeholder_email}
                       {...register('email')}
-                      className=" block h-12 w-full px-3 pb-2.5 pt-4 text-[14px] xl2:text-base text-gray-800 !bg-white rounded-xl border border-gray-300 appearance-none focus:outline-none focus:ring-1 focus:ring-[#DCDBDD] focus:border-[#DCDBDD] peer"
+                      className=" block h-10 w-full px-3 pb-2.5 pt-4 text-[14px] xl2:text-base text-gray-800 !bg-white rounded-xl border border-gray-300 appearance-none focus:outline-none focus:ring-1 focus:ring-[#DCDBDD] focus:border-[#DCDBDD] peer"
                     />
                     <label
                       htmlFor="floating_outlined"
-                      className="absolute text-[14px] md:text-[16px] text-[#84818A] duration-300 transform -translate-y-1/2 top-1/2 z-10 origin-[0] bg-[#FBFCFC] px-2 peer-focus:top-2 peer-focus:scale-75 
+                      className="absolute text-[13px] md:text-[14px] text-[#84818A] duration-300 transform -translate-y-1/2 top-1/2 z-10 origin-[0] bg-[#FBFCFC] px-2 peer-focus:top-2 peer-focus:scale-75 
                         peer-focus:-translate-y-4 peer-focus:text-[#84818A] 
                         peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 
                          peer-valid:top-2 peer-valid:scale-75 peer-valid:-translate-y-4
@@ -181,7 +181,7 @@ export const Signup = (): JSX.Element => {
                     )}
                   </div>
                   <div className="relative w-full col-span-12 lg:col-span-6">
-                    <div className="relative flex items-center h-12 w-full rounded-xl border border-gray-300 focus-within:ring-1 focus-within:ring-[#DCDBDD] focus-within:border-[#DCDBDD] bg-white overflow-hidden">
+                    <div className="relative flex items-center h-10 w-full rounded-xl border border-gray-300 focus-within:ring-1 focus-within:ring-[#DCDBDD] focus-within:border-[#DCDBDD] bg-white overflow-hidden">
                       <div className="h-full border-r border-gray-200">
                         <Select
                           value={selectedCountry.code}
@@ -238,11 +238,11 @@ export const Signup = (): JSX.Element => {
                       type="text"
                       placeholder={t.auth.first_name}
                       {...register('firstName')}
-                      className=" block h-12 w-full px-3 pb-2.5 pt-4 text-[14px] xl2:text-base text-gray-800 !bg-white rounded-xl border border-gray-300 appearance-none focus:outline-none focus:ring-1 focus:ring-[#DCDBDD] focus:border-[#DCDBDD] peer"
+                      className=" block h-10 w-full px-3 pb-2.5 pt-4 text-[14px] xl2:text-base text-gray-800 !bg-white rounded-xl border border-gray-300 appearance-none focus:outline-none focus:ring-1 focus:ring-[#DCDBDD] focus:border-[#DCDBDD] peer"
                     />
                     <label
                       htmlFor="floating_outlined"
-                      className="absolute text-[14px] md:text-[16px] text-[#84818A] duration-300 transform -translate-y-1/2 top-1/2 z-10 origin-[0] bg-[#FBFCFC] px-2 peer-focus:top-2 peer-focus:scale-75 
+                      className="absolute text-[13px] md:text-[14px] text-[#84818A] duration-300 transform -translate-y-1/2 top-1/2 z-10 origin-[0] bg-[#FBFCFC] px-2 peer-focus:top-2 peer-focus:scale-75 
                         peer-focus:-translate-y-4 peer-focus:text-[#84818A] 
                         peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 
                          peer-valid:top-2 peer-valid:scale-75 peer-valid:-translate-y-4
@@ -261,11 +261,11 @@ export const Signup = (): JSX.Element => {
                       type="text"
                       placeholder={t.auth.last_name}
                       {...register('lastName')}
-                      className=" block h-12 w-full px-3 pb-2.5 pt-4 text-[14px] xl2:text-base text-gray-800 !bg-white rounded-xl border border-gray-300 appearance-none focus:outline-none focus:ring-1 focus:ring-[#DCDBDD] focus:border-[#DCDBDD] peer"
+                      className=" block h-10 w-full px-3 pb-2.5 pt-4 text-[14px] xl2:text-base text-gray-800 !bg-white rounded-xl border border-gray-300 appearance-none focus:outline-none focus:ring-1 focus:ring-[#DCDBDD] focus:border-[#DCDBDD] peer"
                     />
                     <label
                       htmlFor="floating_outlined"
-                      className="absolute text-[14px] md:text-[16px] text-[#84818A] duration-300 transform -translate-y-1/2 top-1/2 z-10 origin-[0] bg-[#FBFCFC] px-2 peer-focus:top-2 peer-focus:scale-75 
+                      className="absolute text-[13px] md:text-[14px] text-[#84818A] duration-300 transform -translate-y-1/2 top-1/2 z-10 origin-[0] bg-[#FBFCFC] px-2 peer-focus:top-2 peer-focus:scale-75 
                         peer-focus:-translate-y-4 peer-focus:text-[#84818A] 
                         peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 
                          peer-valid:top-2 peer-valid:scale-75 peer-valid:-translate-y-4
@@ -287,15 +287,14 @@ export const Signup = (): JSX.Element => {
                         type={showPassword ? 'text' : 'password'}
                         placeholder={t.auth.placeholder_password}
                         {...register('password')}
-                        className="block h-12 w-full px-3 pb-2.5 pt-4 text-[14px] xl2:text-base text-gray-800 bg-white rounded-xl border border-gray-300 appearance-none focus:outline-none focus:ring-1 focus:ring-[#DCDBDD] focus:border-[#DCDBDD] peer"
+                        className="block h-10 w-full px-3 pb-2.5 pt-4 text-[14px] xl2:text-base text-gray-800 bg-white rounded-xl border border-gray-300 appearance-none focus:outline-none focus:ring-1 focus:ring-[#DCDBDD] focus:border-[#DCDBDD] peer"
                       />
                       <Button
                         type="button"
                         variant="ghost"
                         size="icon"
-                        className={`absolute top-1/2 transform -translate-y-1/2 hover:bg-transparent ${
-                          isRTL ? 'left-3' : 'right-3'
-                        } text-gray-400 hover:text-gray-600`}
+                        className={`absolute top-1/2 transform -translate-y-1/2 hover:bg-transparent ${isRTL ? 'left-3' : 'right-3'
+                          } text-gray-400 hover:text-gray-600`}
                         onClick={() => setShowPassword(!showPassword)}
                       >
                         {showPassword ? (
@@ -306,7 +305,7 @@ export const Signup = (): JSX.Element => {
                       </Button>
                       <label
                         htmlFor="floating_outlined"
-                        className="absolute text-[14px] md:text-[16px] text-[#84818A] duration-300 transform -translate-y-1/2 top-1/2 z-10 origin-[0] bg-[#FBFCFC] px-2 peer-focus:top-2 peer-focus:scale-75 
+                        className="absolute text-[13px] md:text-[14px] text-[#84818A] duration-300 transform -translate-y-1/2 top-1/2 z-10 origin-[0] bg-[#FBFCFC] px-2 peer-focus:top-2 peer-focus:scale-75 
                         peer-focus:-translate-y-4 peer-focus:text-[#84818A] 
                         peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 
                          peer-valid:top-2 peer-valid:scale-75 peer-valid:-translate-y-4
@@ -321,17 +320,17 @@ export const Signup = (): JSX.Element => {
                       )}
                     </div>
                     {password && (
-                      <div className="mt-2">
+                      <div className="mt-1">
                         <div className="flex items-center gap-2 mb-1">
-                          <div className="flex-1 bg-gray-200 rounded-full h-1.5">
+                          <div className="flex-1 bg-gray-200 rounded-full h-1">
                             <div
-                              className={`h-1.5 rounded-full transition-all duration-300 !bg-[#87B740] ${getPasswordStrengthColor()}`}
+                              className={`h-1 rounded-full transition-all duration-300 !bg-[#87B740] ${getPasswordStrengthColor()}`}
                               style={{
                                 width: `${(passwordStrength / 5) * 100}%`,
                               }}
                             />
                           </div>
-                          <span className="text-xs font-medium text-gray-600">
+                          <span className="text-[10px] font-medium text-gray-600">
                             {getPasswordStrengthText()}
                           </span>
                         </div>
@@ -346,15 +345,14 @@ export const Signup = (): JSX.Element => {
                         type={showConfirmPassword ? 'text' : 'password'}
                         placeholder={t.auth.confirm_password}
                         {...register('confirmPassword')}
-                        className="block h-12 w-full px-3 pb-2.5 pt-4 text-[14px] xl2:text-base text-gray-800 bg-white rounded-xl border border-gray-300 appearance-none focus:outline-none focus:ring-1 focus:ring-[#DCDBDD] focus:border-[#DCDBDD] peer"
+                        className="block h-10 w-full px-3 pb-2.5 pt-4 text-[14px] xl2:text-base text-gray-800 bg-white rounded-xl border border-gray-300 appearance-none focus:outline-none focus:ring-1 focus:ring-[#DCDBDD] focus:border-[#DCDBDD] peer"
                       />
                       <Button
                         type="button"
                         variant="ghost"
                         size="icon"
-                        className={`absolute top-1/2 transform -translate-y-1/2 hover:bg-transparent ${
-                          isRTL ? 'left-3' : 'right-3'
-                        } text-gray-400 hover:text-gray-600`}
+                        className={`absolute top-1/2 transform -translate-y-1/2 hover:bg-transparent ${isRTL ? 'left-3' : 'right-3'
+                          } text-gray-400 hover:text-gray-600`}
                         onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                       >
                         {showConfirmPassword ? (
@@ -365,7 +363,7 @@ export const Signup = (): JSX.Element => {
                       </Button>
                       <label
                         htmlFor="floating_outlined"
-                        className="absolute text-[14px] md:text-[16px] text-[#84818A] duration-300 transform -translate-y-1/2 top-1/2 z-10 origin-[0] bg-[#FBFCFC] px-2 peer-focus:top-2 peer-focus:scale-75 
+                        className="absolute text-[13px] md:text-[14px] text-[#84818A] duration-300 transform -translate-y-1/2 top-1/2 z-10 origin-[0] bg-[#FBFCFC] px-2 peer-focus:top-2 peer-focus:scale-75 
                         peer-focus:-translate-y-4 peer-focus:text-[#84818A] 
                         peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 
                          peer-valid:top-2 peer-valid:scale-75 peer-valid:-translate-y-4
@@ -383,7 +381,7 @@ export const Signup = (): JSX.Element => {
                 </div>
 
                 {/* Terms */}
-                <div className="flex items-start gap-3 pt-2">
+                <div className="flex items-start gap-3 pt-1">
                   <input
                     type="checkbox"
                     id="agreeToTerms"
@@ -391,7 +389,7 @@ export const Signup = (): JSX.Element => {
                     className="w-4 h-4 mt-1 rounded border-gray-300 checked:bg-[#87B740] checked:border-[#87B740]  accent-[#5ea037] cursor-pointer"
                   />
 
-                  <label htmlFor="agreeToTerms" className="text-sm text-[#84818A]">
+                  <label htmlFor="agreeToTerms" className="text-xs text-[#84818A]">
                     {t.auth.i_agree_to}{' '}
                     <Link
                       to={getLocalizedPath('/Terms_Conditions', language)}
@@ -409,34 +407,34 @@ export const Signup = (): JSX.Element => {
                   </label>
                 </div>
                 {errors.agreeToTerms && (
-                  <span className="text-red-500 text-sm -mt-4 block">
+                  <span className="text-red-500 text-sm -mt-2 block">
                     {errors.agreeToTerms.message}
                   </span>
                 )}
                 <Button
                   type="submit"
                   // disabled={isSubmitting}
-                  className="w-full h-12 bg-[#87B740] hover:bg-primaryColor text-white font-semibold text-base rounded-xl"
+                  className="w-full h-10 bg-[#87B740] hover:bg-primaryColor text-white font-semibold text-base rounded-xl"
                 >
                   {isSubmitting ? t.auth.creating_account : t.auth.create_account}
                 </Button>
 
                 {/* Divider */}
-                <div className="relative py-3">
+                <div className="relative py-2">
                   <Separator />
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="bg-[#FBFCFC] px-4 text-sm text-[#84818A] text-[14px] font-normal">
+                    <span className="bg-[#FBFCFC] px-4 text-xs text-[#84818A] text-[12px] font-normal">
                       {t.auth.or}
                     </span>
                   </div>
                 </div>
 
                 {/* Social Login */}
-                <div className=" flex justify-between items-center gap-4 lg:px-7 w-full">
+                <div className=" flex justify-between items-center gap-3 lg:px-4 w-full">
                   <Button
                     type="button"
                     variant="outline"
-                    className="flex-1  flex-shrink-0  h-12 rounded-[12px] border-[#DCDBDD] text-[14px] font-medium"
+                    className="flex-1  flex-shrink-0  h-10 rounded-[12px] border-[#DCDBDD] text-[13px] font-medium"
                     onClick={handleGoogleSignup}
                   >
                     <div className="flex-shrink-0">
@@ -447,7 +445,7 @@ export const Signup = (): JSX.Element => {
                   <Button
                     type="button"
                     variant="outline"
-                    className="flex-1 flex-shrink-0 h-12 rounded-[12px] border-[#DCDBDD] text-[14px] font-medium"
+                    className="flex-1 flex-shrink-0 h-10 rounded-[12px] border-[#DCDBDD] text-[13px] font-medium"
                     onClick={handleFacebookSignup}
                   >
                     <div className="flex-shrink-0 w-[15px] h-[15px] p-3  bg-[#1977F3] rounded-full  flex items-center justify-center">
@@ -460,11 +458,11 @@ export const Signup = (): JSX.Element => {
             </div>
           </div>
         </div>
-        <div className="flex-1 pb-16   hidden lg:flex ">
+        <div className="flex-1 hidden lg:flex">
           <img
             src="/Calculate my needs.svg"
             alt="goalinfo"
-            className="rounded-[32px] h-full w-full object-cover "
+            className="rounded-[32px] w-full object-cover h-full"
           />
         </div>
       </div>

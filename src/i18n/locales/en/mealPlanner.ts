@@ -1,7 +1,7 @@
 import { MealPlannerTranslations } from '../../types';
 
 export const mealPlanner: MealPlannerTranslations = {
-  title: 'Meal Planner',
+  title: 'Smart Planner',
   plan_meals: 'Plan your meals and track your nutrition goals',
   daily_nutrition: 'Daily Nutrition',
   weekly_summary: 'Weekly Summary',

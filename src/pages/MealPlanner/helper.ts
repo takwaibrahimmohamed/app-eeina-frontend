@@ -106,6 +106,29 @@ export function formatMealPlans(
     const mealPlanTypes = dayMealPlan ? dayMealPlan.mealPlan.map((mp) => mp.mealType) : [];
     const allMealTypes = [...new Set([...mealTypeSlugs, ...mealPlanTypes])];
 
+    const MEAL_ORDER = [
+      'breakfast',
+      'mid-morning-snack',
+      'lunch',
+      'afternoon-snack',
+      'dinner',
+      'evening-snack',
+    ];
+
+    allMealTypes.sort((a, b) => {
+      const indexA = MEAL_ORDER.indexOf(a);
+      const indexB = MEAL_ORDER.indexOf(b);
+
+      if (indexA !== -1 && indexB !== -1) {
+        return indexA - indexB;
+      }
+
+      if (indexA !== -1) return -1;
+      if (indexB !== -1) return 1;
+
+      return a.localeCompare(b);
+    });
+
     allMealTypes.forEach((mealType) => {
       const localizedLabel = getLocalizedMealType(mealType, dayMealTypes, language);
       result[dateStr][mealType] = {

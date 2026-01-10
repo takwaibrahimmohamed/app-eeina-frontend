@@ -1,7 +1,7 @@
 import { MealPlannerTranslations } from '../../types';
 
 export const mealPlanner: MealPlannerTranslations = {
-  title: 'خطة التغذية',
+  title: 'المخطط الذكي',
   plan_meals: 'خطط وجباتك وتابع أهدافك الغذائية',
   daily_nutrition: 'التغذية اليومية',
   weekly_summary: 'ملخص  الأسبوعي',

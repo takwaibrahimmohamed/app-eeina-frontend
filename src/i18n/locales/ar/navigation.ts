@@ -5,7 +5,7 @@ export const navigation: NavigationTranslations = {
   fruits: 'الفواكه',
   Recipes: 'الوصفات',
   saved: 'المحفوظة',
-  planner: 'خطة التغذية',
+  planner: 'المخطط الذكي',
   lists: 'قائمة التسوق',
   profile: 'الملف الشخصي',
   processed_food: 'الأطعمة المصنعة',

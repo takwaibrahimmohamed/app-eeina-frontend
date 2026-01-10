@@ -4,7 +4,7 @@ export const navigation: NavigationTranslations = {
   home: 'Home',
   Recipes: 'Recipes',
   saved: 'Saved',
-  planner: 'Planner',
+  planner: 'Smart Planner',
   lists: 'Lists',
   profile: 'Profile',
   fruits: 'Fruits',

@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from 'react';
+import { useState } from 'react';
 import { CalendarDays } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
 
@@ -123,9 +123,9 @@ const MealPlanner = () => {
     const payload = originalMealPlan
       ? formatPayloadForMealPlan(originalMealPlan) //  format it for payload
       : {
-          date: formatDateKey(selectedDate),
-          mealPlan: [],
-        };
+        date: formatDateKey(selectedDate),
+        mealPlan: [],
+      };
     // Add the new meal item to the meal plan
     payload.mealPlan.push({
       mealType: selectedMealType,

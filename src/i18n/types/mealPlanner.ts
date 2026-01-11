@@ -78,6 +78,7 @@ export interface MealPlannerTranslations {
   daily_progress: string;
   percent_complete: string;
   meal_time: string;
+  view_month: string;
   view_week: string;
   view_day: string;
 }

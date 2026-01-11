@@ -80,6 +80,7 @@ export const mealPlanner: MealPlannerTranslations = {
   daily_progress: 'التقدم اليومي',
   percent_complete: '{percent}% مكتمل',
   meal_time: 'وقت الوجبة',
+  view_month: 'شهر',
   view_week: 'أسبوع',
   view_day: 'يوم',
 };

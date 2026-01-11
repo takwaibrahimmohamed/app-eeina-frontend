@@ -1,4 +1,4 @@
-export type ViewMode = 'week' | 'day';
+export type ViewMode = 'week' | 'day' | 'month';
 type LanguageMap = { en: string; ar: string };
 
 // response from backend
@@ -14,6 +14,11 @@ export interface PlannerItem {
     protein: { amount: number };
     carbs: { amount: number };
     fat: { amount: number };
+    fiber?: { amount: number };
+    sugar?: { amount: number };
+    sodium?: { amount: number };
+    potassium?: { amount: number };
+    cholesterol?: { amount: number };
   };
   time: number;
   ingredients?: any[];
@@ -53,6 +58,11 @@ export interface MealItem {
   protein: number;
   carbs: number;
   fat: number;
+  fiber?: number;
+  sugar?: number;
+  sodium?: number;
+  potassium?: number;
+  cholesterol?: number;
   time?: number;
   itemType: 'recipe' | 'processedFood' | 'ingredient';
   mealType?: string;

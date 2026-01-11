@@ -80,6 +80,7 @@ export const mealPlanner: MealPlannerTranslations = {
   daily_progress: 'Daily Progress',
   percent_complete: '{percent}% Complete',
   meal_time: 'Meal Time',
+  view_month: 'Month',
   view_week: 'Week',
   view_day: 'Day',
 };

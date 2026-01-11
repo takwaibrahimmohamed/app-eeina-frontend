@@ -31,6 +31,29 @@ export const getWeekDates = (date: Date) => {
 };
 
 /**
+ * Generate array of dates for the entire month containing the reference date
+ * @param date - Reference date
+ * @returns Array of Date objects representing all days in the month
+ */
+export const getMonthDates = (date: Date) => {
+  const year = date.getFullYear();
+  const month = date.getMonth();
+  const dates = [];
+
+  // Get first day of the month
+  const startDate = new Date(year, month, 1);
+
+  // Get last day of the month by going to next month's 0th day
+  const endDate = new Date(year, month + 1, 0);
+
+  for (let d = startDate; d <= endDate; d.setDate(d.getDate() + 1)) {
+    dates.push(new Date(d));
+  }
+
+  return dates;
+};
+
+/**
  * Determines the type of meal item based on its properties
  * @param meal - Meal object that may contain recipe, processedFood, or ingredient properties
  * @returns The type of meal item as a string ("recipe", "processedFood", "ingredient")
@@ -161,6 +184,21 @@ export function formatMealPlans(
             fat: Math.round(
               calculateNutritonForServing(plannerItem.nutrition.fat.amount ?? 0, meal.serving),
             ),
+            fiber: Math.round(
+              calculateNutritonForServing(plannerItem.nutrition.fiber?.amount ?? 0, meal.serving),
+            ),
+            sugar: Math.round(
+              calculateNutritonForServing(plannerItem.nutrition.sugar?.amount ?? 0, meal.serving),
+            ),
+            sodium: Math.round(
+              calculateNutritonForServing(plannerItem.nutrition.sodium?.amount ?? 0, meal.serving),
+            ),
+            potassium: Math.round(
+              calculateNutritonForServing(plannerItem.nutrition.potassium?.amount ?? 0, meal.serving),
+            ),
+            cholesterol: Math.round(
+              calculateNutritonForServing(plannerItem.nutrition.cholesterol?.amount ?? 0, meal.serving),
+            ),
             time: plannerItem.time,
             itemType: getItemType(meal),
             mealType: mealType, // Keep slug for operations
@@ -216,6 +254,13 @@ export function formatMealItems(
     protein: Math.round(unformattedItem?.nutrition?.protein?.amount),
     carbs: Math.round(unformattedItem?.nutrition?.carbs?.amount),
     fat: Math.round(unformattedItem?.nutrition?.fat?.amount),
+    // Additional micronutrients
+    fiber: Math.round(unformattedItem?.nutrition?.fiber?.amount ?? 0),
+    sugar: Math.round(unformattedItem?.nutrition?.sugar?.amount ?? 0),
+    sodium: Math.round(unformattedItem?.nutrition?.sodium?.amount ?? 0),
+    potassium: Math.round(unformattedItem?.nutrition?.potassium?.amount ?? 0),
+    cholesterol: Math.round(unformattedItem?.nutrition?.cholesterol?.amount ?? 0),
+
     time: unformattedItem?.time,
     itemType: itemType, // Assign the specified item type
     serving: unformattedItem?.servings,
@@ -286,9 +331,14 @@ export const getSelectedDayNutrition = (meals: Record<string, { meals: MealItem[
         acc.protein += meal.protein || 0;
         acc.carbs += meal.carbs || 0;
         acc.fat += meal.fat || 0;
+        acc.fiber += (meal as any).fiber || 0;
+        acc.sugar += (meal as any).sugar || 0;
+        acc.sodium += (meal as any).sodium || 0;
+        acc.potassium += (meal as any).potassium || 0;
+        acc.cholesterol += (meal as any).cholesterol || 0;
         return acc;
       },
-      { calories: 0, protein: 0, carbs: 0, fat: 0 },
+      { calories: 0, protein: 0, carbs: 0, fat: 0, fiber: 0, sugar: 0, sodium: 0, potassium: 0, cholesterol: 0 },
     );
 };
 

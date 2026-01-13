@@ -430,11 +430,11 @@ export const Signup = (): JSX.Element => {
                 </div>
 
                 {/* Social Login */}
-                <div className=" flex justify-between items-center gap-3 lg:px-4 w-full">
+                <div className=" flex flex-col sm:flex-row justify-between items-center gap-3 lg:px-4 w-full">
                   <Button
                     type="button"
                     variant="outline"
-                    className="flex-1  flex-shrink-0  h-10 rounded-[12px] border-[#DCDBDD] text-[13px] font-medium"
+                    className="flex-1 w-full sm:w-fit  flex-shrink-0  h-10 rounded-[12px] border-[#DCDBDD] text-[13px] font-medium"
                     onClick={handleGoogleSignup}
                   >
                     <div className="flex-shrink-0">
@@ -445,7 +445,7 @@ export const Signup = (): JSX.Element => {
                   <Button
                     type="button"
                     variant="outline"
-                    className="flex-1 flex-shrink-0 h-10 rounded-[12px] border-[#DCDBDD] text-[13px] font-medium"
+                    className="flex-1  w-full sm:w-fit flex-shrink-0 h-10 rounded-[12px] border-[#DCDBDD] text-[13px] font-medium"
                     onClick={handleFacebookSignup}
                   >
                     <div className="flex-shrink-0 w-[15px] h-[15px] p-3  bg-[#1977F3] rounded-full  flex items-center justify-center">

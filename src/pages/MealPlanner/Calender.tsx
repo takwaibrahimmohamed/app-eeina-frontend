@@ -27,11 +27,11 @@ export const Calendar: React.FC<CalendarProps> = ({
   visibleDates,
   weekDates,
 }) => {
-  const { t, language } = useLanguage();
+  const { t, language ,isRTL} = useLanguage();
   const dayNames = getDayNames(language);
   const monthNames = getMonthNames(language);
   const [isExpanded, setIsExpanded] = useState(true);
-
+console.log("dayNames",dayNames)
   // For month view, we want to show the days of the month in a grid
   // visibleDates already contains all days of the month if viewMode is 'month'
   // But we might want padding days for empty grid cells (start of month).
@@ -48,7 +48,7 @@ export const Calendar: React.FC<CalendarProps> = ({
       {/* Calendar Header with Navigation and View Mode Toggle */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
         {/* Month/Year Display with Navigation Arrows */}
-        <div className="flex items-center gap-2 sm:gap-4">
+        <div className={`flex ${isRTL?"flex-row-reverse":"flex-row"}  items-center gap-2 sm:gap-4`}>
           <Button
             variant="outline"
             size="icon"
@@ -131,7 +131,7 @@ export const Calendar: React.FC<CalendarProps> = ({
           {/* Day headers */}
           {dayNames.map((day, i) => (
             <div key={i} className="text-center text-[.6rem] sm:text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">
-              {day.substring(0, 3)}
+              {isRTL?day:day.substring(0, 3)}
             </div>
           ))}
 

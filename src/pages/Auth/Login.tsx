@@ -77,7 +77,7 @@ export const Login = (): JSX.Element => {
   return (
     <div className="container min-h-screen lg:h-screen flex items-center justify-center overflow-y-auto lg:overflow-hidden py-10 lg:py-0">
       <div className="flex flex-col lg:flex-row justify-between items-stretch gap-5 lg:gap-7 xl2:gap-16 w-full lg:h-[85vh]">
-        <div className="items-start w-full lg:flex-1 flex flex-col px-0 lg:px-5 xl2:px-10">
+        <div className=" items-start w-full lg:flex-1 flex flex-col px-0 lg:px-5 xl2:px-10">
           <div className="flex w-full flex-col gap-0 lg:gap-8 flex-1">
             <h2 className="leading-8 lg:leading-normal text-start font-semibold text-[20px] lg:text-[24px] xl:text-[30px] xl2:text-[34px] mb-2 lg:mb-4">
               {t.auth.loginTitle}
@@ -91,7 +91,7 @@ export const Login = (): JSX.Element => {
                   {t.auth.create_account}
                 </Link>
               </p>
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 flex flex-col flex-1">
+              <form onSubmit={handleSubmit(onSubmit)} className=" space-y-4 flex flex-col flex-1">
                 {/* Email Input */}
                 <div className="relative w-full ">
                   <input
@@ -199,11 +199,11 @@ export const Login = (): JSX.Element => {
                 </div>
 
                 {/* Social Login */}
-                <div className=" flex justify-between items-center gap-4">
+                <div className=" flex flex-col sm:flex-row justify-between items-center gap-4">
                   <Button
                     type="button"
                     variant="outline"
-                    className="flex-1 w-full h-11 rounded-[12px] border-[#DCDBDD] text-[14px] font-medium"
+                    className=" flex-1 w-full h-11 rounded-[12px] border-[#DCDBDD] text-[14px] font-medium"
                     onClick={handleGoogleLogin}
                   >
                     <Google />
